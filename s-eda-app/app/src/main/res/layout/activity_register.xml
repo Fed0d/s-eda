@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".RegisterActivity">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_bold"
+        android:layout_gravity="center"
+        android:layout_marginTop="200dp"
+        android:textSize="40dp"
+        android:text="Регистрация" />
+
+    <EditText
+        android:id="@+id/username_reg_field"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:inputType="text"
+        android:hint="Username" />
+<!--
+    <EditText
+        android:id="@+id/email_reg_field"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:inputType="textEmailAddress"
+        android:text="Email" />
+-->
+    <EditText
+        android:id="@+id/password_reg_field"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:inputType="textPassword"
+        android:hint="Password" />
+    <EditText
+        android:id="@+id/password2_reg_field"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:inputType="textPassword"
+        android:hint="Repeat the password" />
+    <Button
+        android:id="@+id/button_reg"
+        android:layout_marginTop="20dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Зарегистрироваться" />
+
+    <TextView
+        android:id="@+id/link_to_authorization"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="0dp"
+        android:fontFamily="@font/inter"
+        android:text="или войти в аккаунт"
+        android:textSize="15dp" />
+
+</LinearLayout>
