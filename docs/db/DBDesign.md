@@ -60,7 +60,6 @@
   * dish_type_id - идентификатор типа блюда (long, not null) (*Foreign key* на **dishes_types.dish_type_id**)
 ---
 * recipes_ingredients - сущность ингредиентов рецептов
-  * recipe_ingredient_id - идентификатор ингредиента рецепта (long, PK)
   * recipe_id - идентификатор рецепта (long, not null) (*Foreign key* на **recipes.recipe_id**)
   * ingredient_id - идентификатор ингредиента (long, not null) (*Foreign key* на **ingredients.ingredient_id**)
   * weight - вес ингредиента (double, not null)
