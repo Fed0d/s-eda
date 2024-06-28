@@ -1,10 +1,10 @@
-package org.firefrogs.model;
+package org.firefrogs.entities;
 
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "dishes_types")
-public class DishType {
+@Table(name = "activities")
+public class Activity {
     @Id
     @GeneratedValue
     private Long id;

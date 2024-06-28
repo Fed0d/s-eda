@@ -1,7 +1,6 @@
-package org.firefrogs.model;
+package org.firefrogs.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
 
 @Entity
 @Table(name = "users")
