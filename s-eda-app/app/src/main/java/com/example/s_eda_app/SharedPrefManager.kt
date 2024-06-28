@@ -2,6 +2,9 @@ package com.example.s_eda_app
 
 import android.content.Context
 import android.content.Intent
+import com.example.s_eda_app.activities.MainActivity
+import com.example.s_eda_app.entity.User
+
 class SharedPrefManager private constructor(context: Context) {
     val isLoggedIn: Boolean
         get() {
@@ -39,10 +42,10 @@ class SharedPrefManager private constructor(context: Context) {
         ctx?.startActivity(Intent(ctx, MainActivity::class.java))
     }
     companion object {
-        private val SHARED_PREF_NAME = "volleyregisterlogin"
-        private val KEY_USERNAME = "keyusername"
-        private val KEY_ID = "keyid"
-        private val KEY_CALORIES = "calories"
+        private const val SHARED_PREF_NAME = "volleyregisterlogin"
+        private const val KEY_USERNAME = "keyusername"
+        private const val KEY_ID = "keyid"
+        private const val KEY_CALORIES = "calories"
         private var mInstance: SharedPrefManager? = null
         private var ctx: Context? = null
         @Synchronized

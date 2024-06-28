@@ -1,4 +1,4 @@
-package com.example.s_eda_app
+package com.example.s_eda_app.activities
 
 
 import android.content.Intent
@@ -14,6 +14,11 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.AuthFailureError
 import com.android.volley.Request
 import com.android.volley.Response
+import com.example.s_eda_app.R
+import com.example.s_eda_app.SharedPrefManager
+import com.example.s_eda_app.URLs
+import com.example.s_eda_app.entity.User
+import com.example.s_eda_app.singleton.VolleySingleton
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.HashMap
@@ -33,7 +38,9 @@ class MainActivity : AppCompatActivity() {
         authButton= findViewById(R.id.button_auth)
         linkToRegistration= findViewById(R.id.link_to_registration)
         authButton.setOnClickListener{
-            userLogin()
+            val intent = Intent(this, DishChoiceActivity::class.java)
+            startActivity(intent)
+            //userLogin()
         }
         linkToRegistration.setOnClickListener {
             val registerIntent = Intent(this, RegisterActivity::class.java)
@@ -57,7 +64,8 @@ class MainActivity : AppCompatActivity() {
             userPasswordField.requestFocus()
             return
         }
-        val stringRequest = object : StringRequest(Request.Method.POST, URLs.URL_LOGIN,
+        val stringRequest = object : StringRequest(Request.Method.POST,
+            URLs.URL_LOGIN,
             Response.Listener { response ->
                 try {
                     val obj = JSONObject(response)

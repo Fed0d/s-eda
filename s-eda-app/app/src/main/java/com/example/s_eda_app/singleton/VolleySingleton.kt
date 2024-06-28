@@ -1,4 +1,4 @@
-package com.example.s_eda_app
+package com.example.s_eda_app.singleton
 
 import android.content.Context
 import com.android.volley.Request

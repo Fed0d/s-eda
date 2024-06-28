@@ -6,4 +6,10 @@
     </style>
 
     <style name="Theme.Sedaapp" parent="Base.Theme.Sedaapp" />
+    <style name="Theme.Sedaapp.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="Theme.Sedaapp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.Sedaapp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

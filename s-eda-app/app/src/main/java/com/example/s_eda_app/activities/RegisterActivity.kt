@@ -1,4 +1,4 @@
-package com.example.s_eda_app
+package com.example.s_eda_app.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,6 +13,11 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.AuthFailureError
 import com.android.volley.Request
 import com.android.volley.Response
+import com.example.s_eda_app.R
+import com.example.s_eda_app.SharedPrefManager
+import com.example.s_eda_app.URLs
+import com.example.s_eda_app.entity.User
+import com.example.s_eda_app.singleton.VolleySingleton
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.HashMap
@@ -65,7 +70,8 @@ class RegisterActivity : AppCompatActivity() {
             userPassword2Field.requestFocus()
             return
         }
-        val stringRequest = object : StringRequest(Request.Method.POST, URLs.URL_REGISTER,
+        val stringRequest = object : StringRequest(Request.Method.POST,
+            URLs.URL_REGISTER,
             Response.Listener { response ->
                 try {
                     val obj = JSONObject(response)
