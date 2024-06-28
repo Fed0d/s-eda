@@ -1,4 +1,4 @@
-package org.firefrogs.model;
+package org.firefrogs.entities;
 
 import jakarta.persistence.*;
 
@@ -27,9 +27,13 @@ public class Ingredient {
     @Column(nullable = false)
     private Boolean milk;
     @Column(nullable = false)
+    private Boolean green;
+    @Column(nullable = false)
     private Boolean gluten;
     @Column(nullable = false)
     private Boolean seafood;
+    @Column(nullable = false)
+    private Boolean flour;
     @Column(nullable = false)
     private Boolean mushroom;
     @Column(nullable = false)

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
+    <changeSet id="create_table_roles" author="fed0d">
+        <createTable tableName="roles">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="create_table_user" author="fed0d">
+        <createTable tableName="users">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="nickname" type="varchar">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="add_foreign_key_to_user" author="fed0d">
+        <addForeignKeyConstraint baseTableName="users"
+                                 baseColumnNames="role_id"
+                                 constraintName="fk_users_roles"
+                                 referencedTableName="roles"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="create_table_activities" author="fed0d">
+        <createTable tableName="activities">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="create_table_user_parameters" author="fed0d">
+        <createTable tableName="user_parameters">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="activity_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="birth_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="weight" type="double">
+                <constraints nullable="false"/>
+            </column>
+            <column name="height" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="add_foreign_key_to_user_parameters" author="fed0d">
+        <addForeignKeyConstraint baseTableName="user_parameters"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_user_parameters_users"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="user_parameters"
+                                 baseColumnNames="activity_id"
+                                 constraintName="fk_user_parameters_activities"
+                                 referencedTableName="activities"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="create_table_user_information" author="fed0d">
+        <createTable tableName="user_information">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" type="varchar">
+            </column>
+            <column name="last_name" type="varchar">
+            </column>
+            <column name="email" type="varchar">
+            </column>
+            <column name="phone" type="varchar">
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="add_foreign_key_to_user_information" author="fed0d">
+        <addForeignKeyConstraint baseTableName="user_information"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_user_information_users"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="create_table_ingredients" author="fed0d">
+        <createTable tableName="ingredients">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="calories" type="double">
+                <constraints nullable="false"/>
+            </column>
+            <column name="proteins" type="double">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fats" type="double">
+                <constraints nullable="false"/>
+            </column>
+            <column name="carbohydrates" type="double">
+                <constraints nullable="false"/>
+            </column>
+            <column name="meat" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fish" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="milk" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="green" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gluten" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="flour" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="seafood" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mushroom" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="halal" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="vegan" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="create_dishes_types" author="fed0d">
+        <createTable tableName="dishes_types">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="create_table_recipes" author="fed0d">
+        <createTable tableName="recipes">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="description" type="varchar">
+            </column>
+            <column name="cooking_time" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="additional_time" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="photo_link" type="varchar">
+            </column>
+            <column name="dish_type_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="add_foreign_key_to_recipes" author="fed0d">
+        <addForeignKeyConstraint baseTableName="recipes"
+                                 baseColumnNames="dish_type_id"
+                                 constraintName="fk_recipes_dishes_types"
+                                 referencedTableName="dishes_types"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="create_table_recipes_ingredients" author="fed0d">
+        <createTable tableName="recipes_ingredients">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="recipe_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ingredient_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="weight" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="add_foreign_key_to_recipes_ingredients" author="fed0d">
+        <addForeignKeyConstraint baseTableName="recipes_ingredients"
+                                 baseColumnNames="recipe_id"
+                                 constraintName="fk_recipes_ingredients_recipes"
+                                 referencedTableName="recipes"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="recipes_ingredients"
+                                 baseColumnNames="ingredient_id"
+                                 constraintName="fk_recipes_ingredients_ingredients"
+                                 referencedTableName="ingredients"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="load_dishes_types" author="fed0d">
+        <loadData tableName="dishes_types" file="db/changelog/data/dishes_types.csv" separator=";"/>
+    </changeSet>
+    <changeSet id="load_ingredients" author="fed0d">
+        <loadData tableName="ingredients" file="db/changelog/data/ingredients.csv" separator=";"/>
+    </changeSet>
+    <changeSet id="load_recipes" author="fed0d">
+        <loadData tableName="recipes" file="db/changelog/data/recipes.csv" separator=";"/>
+    </changeSet>
+    <changeSet id="load_recipes_ingredients" author="fed0d">
+        <loadData tableName="recipes_ingredients" file="db/changelog/data/recipes_ingredients.csv" separator=";"/>
+    </changeSet>
+</databaseChangeLog>

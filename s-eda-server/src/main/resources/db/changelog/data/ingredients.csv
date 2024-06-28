@@ -1,0 +1,280 @@
+id;name;meat;milk;green;fish;seafood;gluten;flour;halal;mushroom;vegan;calories;proteins;fats;carbohydrates
+0;Шампиньоны;false;false;false;false;false;false;false;false;true;true;27.0;4.25;1.0;0.0
+1;Кабачок;false;false;false;false;false;false;false;false;false;true;24.0;0.6666666666666666;0.3333333333333333;4.666666666666667
+2;Картофель;false;false;false;false;false;false;false;false;false;true;77.0;2.0;0.5;16.5
+3;Морковь;false;false;false;false;false;false;false;false;false;true;35.0;1.0;0.0;7.0
+4;Лук репчатый;false;false;false;false;false;false;false;false;false;true;41.0;1.0;0.0;8.0
+5;Помидоры;false;false;false;false;false;false;false;false;false;true;20.0;1.0;0.0;4.0
+6;петрушка;false;false;true;false;false;false;false;false;false;true;49.0;3.7;0.4;7.6
+7;Вода;false;false;false;false;false;false;false;false;false;true;0.0;0.0;0.0;0.0
+8;масло;false;false;false;false;false;false;false;false;false;true;884.0;0.0;100.0;0.0
+9;Свекла;false;false;false;false;false;false;false;false;false;true;42.0;1.5;0.0;9.0
+10;Капуста белокочанная;false;false;false;false;false;false;false;false;false;true;28.0;2.0;0.0;5.0
+11;чеснок;false;false;false;false;false;false;false;false;false;true;149.0;6.5;0.5;29.9
+12;грудка;true;false;false;false;false;false;false;false;false;false;113.0;23.6;1.9;0.4
+13;Рис белый;false;false;false;false;false;false;false;false;false;true;344.0;6.5;0.5;79.0
+14;Укроп и другие пряные травы;false;false;true;false;false;false;false;false;false;true;40.0;5.0;0.0;5.0
+15;Курица тушка;true;false;false;false;false;false;false;false;false;false;238.0;18.25;18.5;0.0
+16;Горбуша;false;false;false;true;false;false;false;false;false;false;147.0;21.0;7.0;0.0
+17;Водка;false;false;false;false;false;false;false;false;false;true;235.0;0.0;0.0;0.0
+18;Креветки очищенные;false;false;false;false;true;false;false;false;false;false;98.05555555555556;20.555555555555554;1.6666666666666665;0.2777777777777778
+19;Огурец соленый;false;false;false;false;false;false;false;false;false;true;13.0;1.0;0.0;1.5
+20;Крупа перловая;false;false;false;false;false;true;false;false;false;true;316.0;10.0;2.0;68.0
+21;Перец сладкий;false;false;false;false;false;false;false;false;false;true;26.0;1.0;0.0;5.0
+22;Фасоль стручковая;false;false;false;false;false;false;false;false;false;true;23.0;3.0;0.0;3.0
+23;Горошек зеленый;false;false;false;false;false;false;false;false;false;true;73.0;5.0;0.0;14.0
+24;Куркума;false;false;false;false;false;false;false;false;false;true;350.0;0.0;0.0;50.0
+25;Кефир 1% жирности;false;true;false;false;false;false;false;false;false;false;40.0;3.0;1.0;4.0
+26;Яйцо куриное;false;false;false;false;false;false;false;false;false;false;157.0;12.5;11.5;0.5
+27;Орех грецкий;false;false;false;false;false;false;false;false;false;true;660.0;20.0;60.0;20.0
+28;Хлеб ржаной;false;false;false;false;false;true;true;false;false;true;165.625;6.875;1.25;34.375
+29;Мука цельнозерновая;false;false;false;false;false;true;true;false;false;true;310.0;10.0;0.0;60.0
+30;Молоко 2,5%;false;true;false;false;false;false;false;false;false;false;54.0;2.8;2.4;4.8
+31;Сыр полутвердый (голландский);false;true;false;false;false;false;false;false;false;false;361.3333333333333;26.666666666666668;27.333333333333332;0.0
+32;Чечевица зерно;false;false;false;false;false;false;false;false;false;true;295.0;24.0;1.5;46.5
+33;Тунец натуральный Консервы;false;false;false;true;false;false;false;false;false;false;96.0;22.666666666666668;0.6666666666666666;0.0
+34;карри;false;false;false;false;false;false;false;false;false;true;352.0;12.7;13.8;25
+35;Печень куриная;true;false;false;false;false;false;false;false;false;false;140.0;20.5;6.0;1.5
+36;Куриные желудки;true;false;false;false;false;false;false;false;false;false;94.0;17.0;2.0;0.0
+37;Макароны из муки;false;false;false;false;false;true;true;false;false;false;338.0;12.0;2.0;70.0
+38;Сухари ржаные;false;false;false;false;false;true;true;false;false;true;335.0;16.666666666666668;1.6666666666666667;70.0
+39;Лимон;false;false;false;false;false;false;false;false;false;true;33.333333333333336;0.0;0.0;3.3333333333333335
+40;Сок томатный;false;false;false;false;false;false;false;false;false;true;18.0;1.0;0.0;3.0
+41;Сыворотка творожная;false;true;false;false;false;false;false;false;false;false;18.2;0.8;0.2;3.6
+42;Фасоль зерно;false;false;false;false;false;true;false;false;false;true;298.0;21.0;2.0;47.0
+43;Куриный окорочок;true;false;false;false;false;false;false;true;false;false;184.66666666666666;21.333333333333332;11.0;0.16666666666666666
+44;Куриные ножки без кожи, тушеные;true;false;false;false;false;false;false;false;false;false;153.33333333333334;26.666666666666668;6.666666666666667;0.0
+45;pasta zara паутинка;false;false;false;false;false;true;true;false;false;false;350.0;12.0;1.0;71.0
+46;Куриные бедра без кожи, тушеные;true;false;false;false;false;false;false;false;false;false;175.71428571428572;25.714285714285715;8.571428571428571;0.0
+47;Куриный бульон;false;false;false;false;false;false;false;false;false;true;30.039525691699605;4.446640316205534;1.0869565217391306;0.790513833992095
+48;Соль поваренная пищевая;false;false;false;false;false;false;false;false;false;true;0.0;0.0;0.0;0.0
+49;Куриная голень;true;false;false;false;false;false;false;false;false;false;150.0;15.0;10.0;0.0
+50;Сельдерей, корень;false;false;true;false;false;false;false;false;false;true;32.0;1.5;0.5;6.5
+51;Лавровый лист;false;false;false;false;false;false;false;false;false;true;300.0;0.0;0.0;100.0
+52;Сахар-песок;false;false;false;false;false;false;false;false;false;true;380.0;0.0;0.0;100.0
+53;Тыква;false;false;false;false;false;false;false;false;false;true;22.0;1.0;0.125;4.375
+54;Корица;false;false;false;false;false;false;false;false;false;true;240.0;0.0;0.0;80.0
+55;Судак;false;false;false;true;false;false;false;false;false;false;83.0;19.0;0.8333333333333334;0.0
+56;Сухарики из белого хлеба;false;false;false;false;false;true;true;false;false;true;330.83333333333337;10.833333333333334;1.6666666666666667;72.5
+57;Масурдал, суп из чечевицы Ярмарка;false;false;false;false;false;true;false;false;false;true;300.0;22.0;1.6;49.2
+58;Приправа Kamis Прованские травы;false;false;false;false;false;false;false;false;false;true;200.0;33.333333333333336;0.0;33.333333333333336
+59;Шафран;false;false;false;false;false;false;false;false;false;true;300.0;0.0;0.0;66.66666666666667
+60;Кальмар (мясо);false;false;false;false;true;false;false;false;false;false;100.0;18.0;2.0;2.0
+61;Осьминог;false;false;false;false;true;false;false;false;false;false;82.0;15.0;1.0;2.0
+62;Мидии;false;false;false;false;true;false;false;false;false;false;77.14285714285715;11.428571428571429;1.4285714285714286;2.857142857142857
+63;Пшено;false;false;false;false;false;true;false;false;false;true;348.0;12.0;3.0;69.0
+64;Свинина лопаточная часть;true;false;false;false;false;false;false;true;false;false;365.6;14.8;29.4;0.0
+65;Томатная паста;false;false;false;false;false;true;true;false;false;false;102.0;4.0;0.0;20.0
+66;пастернак;false;false;false;false;false;false;false;false;false;true;47.0;1.0;1.0;9.0
+67;барбарис;false;false;false;false;false;false;false;false;false;true;152.0;0.0;0.0;38.0
+68;Имбирь корень;false;false;false;false;false;false;false;false;false;true;350.0;10.0;10.0;70.0
+69;Баранина с косточкой;true;false;false;false;false;false;false;false;false;false;209.0;15.6;16.4;0.0
+70;Горох сушеный;false;false;false;false;false;false;false;false;false;true;298.0;20.4;2.0;49.6
+71;Индейка, грудка без кожи;true;false;false;false;false;false;false;false;false;false;84.0;19.2;0.8;0.0
+72;Сливки, 10,0% жирности;false;true;false;false;false;false;false;false;false;false;119.0;3.0;10.0;5.0
+73;Подосиновики;false;false;false;false;false;false;false;false;true;true;22.0;3.3333333333333335;0.6666666666666666;1.3333333333333333
+74;Белый гриб;false;false;false;false;false;false;false;false;true;true;34.0;3.6666666666666665;1.6666666666666667;1.0
+75;Куриная спинка;true;false;false;false;false;false;false;true;false;false;319.0;14.0;28.666666666666668;0.0
+76;семга;false;false;false;true;false;false;false;false;false;false;140.0;21.6;6.0;0.0
+77;Редис;false;false;false;false;false;false;false;false;false;true;20.0;2.0;0.0;4.0
+78;Оливки. Консервы;false;false;false;false;false;false;false;false;false;true;175.0;1.842105263157895;16.315789473684212;5.2631578947368425
+79;Ребрышки копченые свиные;true;false;false;false;false;false;false;true;false;false;220.0;12.0;42.0;0.0
+80;Сметана 10,0% жирности;false;true;false;false;false;false;false;false;false;false;118.75;2.5;10.0;3.75
+81;Уксус 3%;false;false;false;false;false;false;false;false;false;true;0.0;0.0;0.0;0.0
+82;Говядина грудинка мякоть;true;false;false;false;false;false;false;false;false;false;224.5;17.0;17.5;0.0
+83;Паприка сушёная, молотая;false;false;false;false;false;false;false;false;false;true;280.0;20.0;20.0;60.0
+84;Фасоль в томате "Бобовая страна";false;false;false;false;false;false;false;false;false;true;112.09876543209877;6.913580246913581;0.7407407407407408;19.506172839506174
+85;Кета натуральная Консервы;false;false;false;true;false;false;false;false;false;false;129.0;21.666666666666668;4.666666666666667;0.0
+86;Хмели-сунели;false;false;false;false;false;true;false;false;false;true;420.0;0.0;40.0;20.0
+87;Салат;false;false;true;false;false;false;false;false;false;true;13.333333333333334;0.0;0.0;0.0
+88;Соевый соус;false;false;false;false;false;false;false;false;false;true;50.0;10.0;0.0;10.0
+89;Щавель;false;false;true;false;false;false;false;false;false;true;22.0;1.6666666666666667;0.3333333333333333;3.0
+90;Томат грунтовый;false;false;false;false;false;false;false;false;false;true;17.894736842105264;1.0526315789473684;0.0;3.8596491228070176
+91;Яичный белок куриный;false;false;false;false;false;false;false;false;false;false;44.0;12.0;0.0;0.0
+92;Кукуруза Консервы;false;false;false;false;false;false;false;false;false;true;119.33333333333333;4.0;1.3333333333333333;22.666666666666668
+93;Филе куриное;true;false;false;false;false;false;false;false;false;false;113.0;23.5;2.0;0.5
+94;Горчица столовая;false;false;false;false;false;false;false;false;false;true;420.0;0.0;40.0;20.0
+95;Квас хлебный;false;false;false;false;false;true;true;false;false;true;27.0;0.2;0.0;5.2
+96;Шпинат-пюре. Консервы;false;false;true;false;false;false;false;false;false;true;16.0;2.0;0.0;2.0
+97;Хрен;false;false;false;false;false;false;false;false;false;true;55.0;5.0;0.0;10.0
+98;Окунь горячего копчения;false;false;false;true;false;false;false;false;false;false;166.0;23.5;8.0;0.0
+99;Йогурт 1,5%;false;true;false;false;false;false;false;false;false;false;57.0;4.0;1.5;6.0
+100;Лапша рисовая;false;false;false;false;false;true;true;false;false;false;344.0;7.0;0.0;79.0
+101;Утка;true;false;false;false;false;false;false;false;false;false;308.0;13.5;28.5;0.0
+102;Кунжут-семя;false;false;false;false;false;false;false;false;false;true;566.6666666666667;20.0;50.0;13.333333333333334
+104;Вишня;false;false;false;false;false;false;false;false;false;true;52.0;0.6666666666666666;0.3333333333333333;10.666666666666666
+105;Крахмал картофельный;false;false;false;false;false;false;false;false;false;true;327.0;0.0;0.0;80.0
+106;Лимонная кислота;false;false;false;false;false;false;false;false;false;true;0.0;0.0;0.0;0.0
+107;Путассу;false;false;false;true;false;false;false;false;false;false;72.0;16.0;0.6666666666666666;0.0
+108;Мюсли "Lucky Days" Тропический микс;false;false;false;false;false;true;false;false;false;true;290.0;8.571428571428571;1.4285714285714286;61.42857142857143
+109;Семена льна;false;false;false;false;false;false;false;false;false;true;543.0;18.29;42.16;28.88
+110;Гречневая крупа продел;false;false;false;false;false;false;false;false;false;true;300.0;10.0;2.0;60.0
+111;Яблоки;false;false;false;false;false;false;false;false;false;true;47.142857142857146;0.0;0.0;10.0
+112;Минтай;false;false;false;true;false;false;false;false;false;false;70.0;16.0;0.8571428571428571;0.0
+113;Форель морская;false;false;false;true;false;false;false;false;false;false;157.0;20.6;4.4;0.0
+114;Куриный фарш;true;false;false;false;false;false;false;true;false;false;143.0;17.4;8.2;0.0
+115;Кориандр;false;false;false;false;false;false;false;false;false;true;0.0;0.0;0.0;0.0
+116;Зира (кумин);false;false;false;false;false;false;false;false;false;true;120.0;20.0;0.0;40.0
+117;Вино сухое;false;false;false;false;false;false;false;false;false;true;68.0;0.0;0.0;0.25
+118;Охотничьи колбаски;true;false;false;false;false;true;false;true;false;false;463.3333333333333;25.333333333333332;40.0;0.6666666666666666
+119;Брусника;false;false;false;false;false;false;false;false;false;true;46.0;1.0;1.0;8.0
+120;Тмин;false;false;false;false;false;false;false;false;false;true;330.0;20.0;20.0;50.0
+121;Рассол огуречный;false;false;false;false;false;false;false;false;false;true;12.0;0.0;0.0;0.5
+122;Крапива;false;false;true;false;false;false;false;false;false;true;34.0;2.0;0.0;6.0
+123;Маслины средние и мелкие;false;false;false;false;false;false;false;false;false;true;115.0;1.0;11.0;6.0
+124;Лисички;false;false;false;false;false;false;false;false;true;true;19.0;1.5;1.0;1.0
+125;Ботва свекольная;false;false;true;false;false;false;false;false;false;true;28.0;2.0;0.0;6.0
+126;Простокваша 2.5%;false;true;false;false;false;false;false;false;false;false;53.0;3.0;2.6;4.2
+127;Малина;false;false;false;false;false;false;false;false;false;true;46.0;0.8;0.5333333333333333;8.266666666666667
+128;Подсластитель Эритрит;false;false;false;false;false;false;false;false;false;true;0.0;0.0;0.0;0.0
+129;Ванильный сахар;false;false;false;false;false;false;false;false;false;true;400.0;0.0;0.0;100.0
+130;Бекон;true;false;false;false;false;false;false;false;false;false;500.0;23.333333333333336;45.0;0.0
+131;пажитник;false;false;false;false;false;false;false;false;false;true;350.0;50.0;0.0;50.0
+132;масала;false;false;false;false;false;false;false;false;false;true;380.0;20.0;20.0;40.0
+133;корень фенхеля;false;false;false;false;false;false;false;false;false;true;31.0;1.3333333333333333;0.3333333333333333;7.333333333333333
+134;Лапша фунчеза;false;false;false;false;false;false;false;false;false;true;320.0;0.5;0.5;84.0
+135;Тофу;false;false;false;false;false;false;false;false;false;true;74.0;8.0;4.0;0.0
+136;Водоросли Нори;false;false;false;false;false;false;false;false;false;true;350.0;50.0;0.0;50.0
+137;Цуккини;false;false;false;false;false;false;false;false;false;true;15.9375;1.5625;0.3125;3.125
+138;Овсяные хлопья геркулес;false;false;false;false;false;true;false;false;false;true;351.42857142857144;12.857142857142858;5.714285714285714;61.42857142857143
+139;Грудинка копчено-запеченная (свинина);true;false;false;false;false;false;false;false;false;false;514.0;10.0;53.0;0.0
+140;Колбаса вареная докторская;true;false;false;false;false;true;false;true;false;false;257.3333333333333;12.666666666666666;22.0;1.3333333333333333
+141;Прованские травы;false;false;true;false;false;false;false;false;false;true;200.0;0.0;0.0;0.0
+142;Пиво;false;false;false;false;false;true;false;false;false;true;42.0;0.4;0.0;4.6
+143;Свиные ребра с тонким слоем мяса;true;false;false;false;false;false;false;true;false;false;277.0;15.5;23.5;0.0
+144;Базилик свежий;false;false;true;false;false;false;false;false;false;true;26.666666666666668;0.0;0.0;6.666666666666667
+145;Апельсин;false;false;false;false;false;false;false;false;false;true;43.333333333333336;0.6666666666666666;0.0;8.0
+146;Груздь;false;false;false;false;false;false;false;false;false;true;18.666666666666668;1.6666666666666667;0.6666666666666666;1.0
+147;Земляника, клубника;false;false;false;false;false;false;false;false;false;true;41.0;0.75;0.5;7.5
+148;Томатное пюре. Консервы;false;false;false;false;false;false;false;false;false;true;65.96774193548387;3.5483870967741935;0.0;11.774193548387096
+149;маш;false;false;false;false;false;false;false;false;false;true;300.0;23.5;2.0;46.0
+150;Курага;false;false;false;false;false;false;false;false;false;true;233.33333333333334;6.666666666666667;0.0;50.0
+151;Изюм кишмиш;false;false;false;false;false;false;false;false;false;true;280.0;5.0;0.0;65.0
+152;Пастрома из курицы;true;false;false;false;false;true;false;false;false;false;104.0;20.0;2.0;2.0
+153;Творог, 5 %;false;true;false;false;false;false;false;false;false;false;145.0;21.0;5.0;3.0
+154;Ветчина особая;true;false;false;false;false;true;false;true;false;false;126.0;17.666666666666668;6.333333333333333;0.0
+155;Пищевая сода;false;false;false;false;false;false;false;false;false;true;0.0;0.0;0.0;0.0
+156;Кресс-салат;false;false;true;false;false;false;false;false;false;true;10.0;0.0;0.0;0.0
+157;Дрожжи сухие;false;false;false;false;false;false;true;false;false;true;420.0;60.0;0.0;40.0
+158;Тимьян;false;false;false;false;false;false;false;false;false;true;100.0;0.0;0.0;20.0
+159;Скумбрия в масле Консервы;false;false;false;true;false;false;false;false;false;false;318.0;14.4;29.0;0.0
+160;Яичный желток куриный;false;false;false;false;false;false;false;false;false;true;358.0;16.0;32.0;2.0
+161;Сельдь среднесоленая;false;false;false;true;false;false;false;false;false;false;217.2;20.0;15.6;0.0
+162;Ванилин;false;false;false;false;false;false;false;false;false;true;300.0;0.0;0.0;0.0
+163;Абрикосы;false;false;false;false;false;false;false;false;false;true;44.0;1.0;0.0;9.0
+164;Баклажаны;false;false;false;false;false;false;false;false;false;true;24.0;1.2;0.2;4.6
+165;Какао-порошок;false;false;false;false;false;false;false;false;false;true;380.0;20.0;20.0;40.0
+166;Варенье из малины;false;false;false;false;false;false;false;false;false;true;270.0;0.0;0.0;70.0
+167;Хек;false;false;false;true;false;false;false;false;false;false;85.88235294117648;16.47058823529412;2.3529411764705883;0.0
+168;Треска;false;false;false;true;false;false;false;false;false;false;75.0;17.5;0.6666666666666666;0.0
+169;груша свежая;false;false;false;false;false;false;false;false;false;true;42.22222222222222;0.5555555555555556;0.5555555555555556;11.11111111111111
+170;Мед натуральный (мёд);false;false;false;false;false;false;false;false;false;true;310.0;0.0;0.0;80.0
+171;Кукурузная крупа;false;false;false;false;false;false;false;false;false;true;328.0;8.0;2.0;72.0
+172;Майонез;false;false;false;false;false;false;false;false;false;true;629.0;3.0;67.0;4.0
+173;Тесто пельменное;false;false;false;false;false;true;true;false;false;false;231.1764705882353;6.470588235294118;0.5882352941176471;50.588235294117645
+174;Батон нарезной;false;false;false;false;false;true;true;false;false;false;262.0;7.5;3.0;51.5
+175;Патиссон;false;false;false;false;false;false;false;false;false;true;19.166666666666668;0.8333333333333334;0.0;4.166666666666667
+176;Сайра в масле Консервы;false;false;false;true;false;false;false;false;false;false;88.0;17.6;2.0;0.0
+177;Банан;false;false;false;false;false;false;false;false;false;true;96.25;1.25;0.0;21.25
+178;Смесь замороженная "Овощной суп";false;false;false;false;false;false;false;false;false;true;41.25;2.5;0.25;7.5
+179;Бадьян;false;false;false;false;false;false;false;false;false;true;340.0;20.0;20.0;60.0
+180;Репа;false;false;false;false;false;false;false;false;false;true;32.0;2.0;0.0;6.0
+181;Фасоль стручковая. Консервы;false;false;false;false;false;false;false;false;false;true;16.0;1.0;0.0;2.0
+182;Цыплята, 1 категория;true;false;false;false;false;false;false;false;false;false;220.0;18.333333333333336;15.833333333333334;0.0
+183;Трюфель;false;false;false;false;false;false;false;false;false;true;100.0;3.2;0.4;2.0
+184;Дайкон (японская редька);false;false;false;false;false;false;false;false;false;true;21.0;1.0;0.0;4.0
+185;Фасоль стручковая. Витамин;false;false;false;false;false;false;false;false;false;true;27.0;2.5;0.0;4.25
+186;Телятина с косточкой;true;false;false;false;false;false;false;false;false;false;96.66666666666667;19.666666666666668;2.0;0.0
+187;Красноперка;false;false;false;true;false;false;false;false;false;false;100.2;18.3;3.0;0.0
+188;Сазан в т/с Консервы;false;false;false;true;false;false;false;false;false;false;143.2;12.4;8.8;3.6
+189;Урюк;false;false;false;false;false;false;false;false;false;true;242.0;5.0;0.0;53.0
+190;Крылышко цыплят (целое);true;false;false;false;false;false;false;false;false;false;210.42857142857142;18.0;15.571428571428571;0.0
+191;Бамия;false;false;false;true;false;false;false;false;false;false;25.0;2.0;0.0;3.6666666666666665
+192;Язык свиной;true;false;false;false;false;false;false;false;false;false;208.0;15.9;16.0;2.1
+193;Опята сжемороженные;false;false;false;false;false;false;false;false;false;true;14.0;2.1666666666666665;0.0;1.3333333333333333
+194;Лук-шалот;false;false;false;false;false;false;false;false;false;true;72.0;2.5;0.0;17.0
+195;Буженина;true;false;false;false;false;false;false;false;false;false;510.0;15.0;50.0;0.0
+196;Розмарин;false;false;false;false;false;false;false;false;false;true;330.0;10.0;20.0;60.0
+197;Спаржа свежая;false;false;false;false;false;false;false;false;false;true;20.0;2.0;0.0;3.0
+198;Куриные крылышки;true;false;false;false;false;false;false;false;false;false;222.0;18.4;16.0;0.0
+199;Карп;false;false;false;true;false;false;false;false;false;false;96.0;16.0;3.6;0.0
+200;Щука;false;false;false;true;false;false;false;false;false;false;82.0;18.8;0.8;0.0
+201;Биокефир Останкинский 0.1%;false;true;false;false;false;false;false;false;false;false;27.0;3.0;0.0;3.5
+202;Отруби пшеничные;false;false;false;false;false;false;false;false;false;true;190.0;20.0;0.0;30.0
+203;Сахарозаменитель;false;false;false;false;false;false;false;false;false;true;0.0;0.0;0.0;0.0
+204;Вермишель;false;false;false;false;false;true;true;false;false;false;373.33333333333337;13.333333333333334;0.0;73.33333333333334
+205;Bauer Деревенское Блюдо;false;false;false;false;false;false;false;false;false;true;63.0;2.0;2.0;9.5
+206;Цукини;false;false;false;false;false;false;false;false;false;true;16.0;1.6666666666666667;0.3333333333333333;3.0
+207;Активиа Питьевая Натуральная;false;true;false;false;false;false;false;false;false;false;50.0;5.0;5.0;5.0
+208;Клетчатка "Наше наследие" растительная;false;false;false;false;false;true;false;false;false;true;343.75;12.5;2.5;76.25
+209;Гвоздика;false;false;false;false;false;false;false;false;false;true;0.0;0.0;0.0;0.0
+210;Сердце говяжье;true;false;false;false;false;false;false;false;false;false;96.0;16.0;3.5;2.0
+211;папоротник;false;false;true;false;false;false;false;false;false;true;34.0;4.470588235294118;0.35294117647058826;5.529411764705882
+212;Сибас;false;false;false;true;false;false;false;false;false;false;99.0;18.0;3.0;0.0
+213;Сулугуни;false;true;false;false;false;false;false;false;false;false;286.25;20.0;22.5;0.0
+214;Горчица-семя;false;false;false;false;false;false;false;false;false;true;470.0;30.0;30.0;20.0
+215;Мясо лося;true;false;false;false;false;false;false;true;false;false;101.49253731343283;20.8955223880597;1.4925373134328357;0.0
+216;Рукола;false;false;false;false;false;false;false;false;false;true;26.0;2.0;0.0;2.0
+217;Разрыхлитель теста;false;false;false;false;false;false;false;false;false;true;75.0;0.0;0.0;25.0
+218;Протеин Dymatize Elite Whey Protein Isolate;false;false;false;false;false;false;false;false;false;true;351.6666666666667;75.0;5.0;6.666666666666667
+219;Какао порошок обезжирений;false;false;false;false;false;false;false;false;false;true;100.0;20.0;10.0;20.0
+220;Кокосовая стружка;false;false;false;false;false;false;false;false;false;true;593.3333333333334;13.333333333333334;66.66666666666667;13.333333333333334
+221;Аджика;false;false;false;false;false;false;false;false;false;true;70.0;0.0;0.0;10.0
+222;кус - кус отварной;false;false;false;false;false;false;false;false;false;true;112.0;3.8;0.2;21.8
+223;Уксусная эссенция, 70%;false;false;false;false;false;false;false;false;false;true;20.0;0.0;0.0;0.0
+224;Устрица;false;false;false;false;true;false;false;false;false;false;72.0;9.0;2.0;5.0
+225;Эстрагон;false;false;false;false;false;false;false;false;false;true;33.333333333333336;0.0;0.0;0.0
+226;Легкие барана;true;false;false;false;false;false;false;false;false;false;83.0;16.0;2.0;79.0
+227;Куриные сердечки;true;false;false;false;false;false;false;false;false;false;158.6;16.2;10.2;0.6
+228;Фетучини;false;false;false;false;false;true;true;false;false;false;384.1666666666667;14.166666666666668;4.166666666666667;68.33333333333334
+229;Почки свиные;true;false;false;false;false;false;false;false;false;false;92.0;15.0;3.6666666666666665;2.6666666666666665
+230;Анчоусы атлантические;false;false;false;true;false;false;false;false;false;false;135.0;20.0;5.0;0.0
+231;Ряженка, 2,5%;false;true;false;false;false;false;false;false;false;false;54.0;3.0;2.5;4.0
+232;свиная рулька;true;false;false;false;false;false;false;true;false;false;294.0;18.6;24.8;0.0
+233;Вешенки свежие;false;false;false;false;false;false;false;false;true;true;38.0;2.4;0.4;6.4
+234;Фасоль печеная в томатном соусе;false;false;false;false;false;false;false;false;false;true;89.2;4.4;1.6;14.0
+235;Mission Deli пшеничные лепёшки со злаками;false;false;false;false;false;false;false;false;false;true;279.76190476190476;7.738095238095238;7.738095238095238;45.23809523809524
+236;Кус-кус;false;false;false;false;false;true;false;false;false;true;376.0;13.0;1.0;72.0
+237;Желатин пищевой;true;false;false;false;false;false;false;false;false;false;355.0;85.0;0.0;0.0
+238;Артишоки;false;false;false;false;false;false;false;false;false;true;28.166666666666668;1.1666666666666667;0.16666666666666666;6.0
+239;Мята свежая;false;false;true;false;false;false;false;false;false;true;50.0;5.0;0.0;10.0
+240;Булгур;false;false;false;false;false;true;false;false;false;true;342.0;12.333333333333334;1.3333333333333333;57.666666666666664
+241;Паппарделле;false;false;false;false;false;true;true;false;false;true;366.0;14.5;0.25;66.0
+242;нут;false;false;false;false;false;false;false;false;false;true;309.0;20.1;4.3;46.2
+243;Клюква замороженная каждый день;false;false;false;false;false;false;false;false;false;true;25.0;0.0;0.0;5.0
+244;Тилапия печеная;false;false;false;true;false;false;false;false;false;false;128.0;26.166666666666668;2.6666666666666665;0.0
+245;Херес;false;false;false;false;false;false;false;false;false;true;125.0;0.0;0.0;5.0
+246;Финики;false;false;false;false;false;false;false;false;false;true;292.0;2.5;0.5;69.0
+247;Шея свиная;true;false;false;false;false;false;false;true;false;false;343.0;13.6;31.933333333333334;0.0
+248;Багет;false;false;false;false;false;true;true;false;false;false;262.0;7.5;3.0;51.5
+249;Конкильони;false;false;false;false;false;true;true;false;false;false;344.0;10.0;1.0;72.0
+250;Сосиски столичные;true;false;false;false;false;true;false;true;false;false;234.0;12.0;20.666666666666668;0.6666666666666666
+251;Мандарин;false;false;false;false;false;false;false;false;false;true;38.0;0.6666666666666666;0.3333333333333333;7.666666666666667
+252;Кофе натуральный молотый;false;false;false;false;false;false;false;false;false;true;200.66666666666666;14.0;14.666666666666666;4.0
+253;Смородина черная;false;false;false;false;false;false;false;false;false;true;44.0;1.0;0.0;7.0
+254;Арахис;false;false;false;false;false;false;false;false;false;true;552.0;26.0;45.0;10.0
+255;Магги на второе для курицы (с пакетом);false;false;false;false;false;false;false;false;false;true;340.0;13.333333333333334;13.333333333333334;46.66666666666667
+256;йогурт греческий.савушкин;false;true;false;false;false;false;false;false;false;false;62.85714285714286;7.142857142857143;1.4285714285714286;4.285714285714286
+257;Хлебцы пшеничные;false;false;false;false;false;true;true;false;false;true;243.33333333333334;10.0;3.3333333333333335;46.66666666666667
+258;Рыжик;false;false;false;false;false;false;false;false;true;true;22.5;2.0;1.0;2.0
+259;Килька балтийская;false;false;false;true;false;false;false;false;false;false;137.2;14.0;9.2;0.0
+260;Кетчуп Хайнц;false;false;false;false;false;true;false;false;false;true;96.0;1.0;0.0;23.0
+261;Каперсы консервированные;false;false;false;false;false;false;false;false;false;true;20.0;0.0;0.0;10.0
+262;Лайм;false;false;false;false;false;false;false;false;false;true;15.0;0.0;0.0;5.0
+263;Грейпфрут;false;false;false;false;false;false;false;false;false;true;35.0;0.5;0.0;6.5
+264;Крабовые палочки;false;false;false;true;false;false;false;false;false;false;88.0;17.5;2.0;0.0
+265;Икра осетровая зернистая;false;false;false;false;true;false;false;false;false;false;204.0;30.0;10.0;0.0
+266;Горчичный порошок;false;false;false;false;false;false;false;false;false;true;385.71428571428567;42.857142857142854;14.285714285714285;28.57142857142857
+267;Наршараб "Грандэлитез" (Азербайджан);false;false;false;false;false;false;false;false;false;true;270.0;0.0;0.0;70.0
+268;Агар;false;false;false;false;false;false;false;false;false;true;20.0;0.0;0.0;80.0
+269;Слоеное тесто бездрожжевое;false;false;false;false;false;false;false;false;false;true;487.14285714285717;6.857142857142857;31.714285714285715;43.142857142857146
+270;Раки морские (лангуст, омар);false;false;false;false;true;false;false;false;false;false;89.0;18.8;1.3;0.5
+271;Рябчик;true;false;false;false;false;false;false;false;false;false;253.88888888888889;18.0;20.0;0.5555555555555556
+272;Редька черная;false;false;false;false;false;false;false;false;false;true;36.11111111111111;1.6666666666666665;0.0;6.666666666666666
+273;Виноград;false;false;false;false;false;false;false;false;false;true;71.66666666666667;0.8333333333333334;0.8333333333333334;15.833333333333334
+274;Водоросли Комбу;false;false;false;false;false;false;false;false;false;true;150.0;0.0;0.0;0.0
+275;Карбонад варено-копченый из свинины;true;false;false;false;false;false;false;true;false;false;135.0;16.0;8.0;0.0
+276;Краб камчатский (мясо);false;false;false;false;true;false;false;false;false;false;96.5;16.0;3.5;0.0
+277;пыльца цветочная;false;false;false;false;false;false;false;false;false;true;380.0;20.0;0.0;60.0
+278;Проростки маша;false;false;true;false;false;false;false;false;false;true;30.0;3.0;0.5;4.0
+279;Ананас;false;false;false;false;false;false;false;false;false;true;52.0;0.3333333333333333;0.16666666666666666;11.833333333333334
