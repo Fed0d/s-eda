@@ -1,9 +1,15 @@
 package org.firefrogs.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
+@Getter
+@Setter
+@RequiredArgsConstructor
 @Entity
 @Table(name = "ingredients")
 public class Ingredient {
@@ -40,6 +46,4 @@ public class Ingredient {
     private Boolean halal;
     @Column(nullable = false)
     private Boolean vegan;
-    @OneToMany(mappedBy = "ingredient")
-    private List<RecipeIngredient> recipes;
 }

@@ -1,10 +1,16 @@
 package org.firefrogs.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.Period;
 
+@Getter
+@Setter
+@RequiredArgsConstructor
 @Entity
 public class UserParameters {
     @Id

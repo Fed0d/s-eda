@@ -1,9 +1,15 @@
 package org.firefrogs.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
+@Getter
+@Setter
+@RequiredArgsConstructor
 @Entity
 @Table(name = "recipes")
 public class Recipe {
@@ -21,6 +27,6 @@ public class Recipe {
     @ManyToOne
     @JoinColumn(name = "dish_type_id", nullable = false)
     private DishType dishType;
-    @OneToMany(mappedBy = "recipe")
-    private List<RecipeIngredient> ingredients;
+    @Transient
+    private List<IngredientWithWeight> ingredientsWithWeight;
 }
