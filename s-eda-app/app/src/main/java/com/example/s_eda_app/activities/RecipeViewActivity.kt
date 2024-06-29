@@ -74,9 +74,9 @@ class RecipeViewActivity : AppCompatActivity() {
             }
             val bitmap: Bitmap = BitmapFactory.decodeFile(fileName)
             img.setImageBitmap(bitmap)
-            Log.i("Seiggailion", "Image saved.")
+            Log.i("Seiggailion", "Image loaded.")
         } catch (e: Exception) {
-            Log.i("Seiggailion", "Failed to save image.")
+            Log.i("Seiggailion", "Failed to load image.")
         }
         backButton.setOnClickListener {
             finish() //FIXME будет ли оно возварщать к прошлому запросу?

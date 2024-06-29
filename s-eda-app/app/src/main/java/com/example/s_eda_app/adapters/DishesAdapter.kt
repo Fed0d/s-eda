@@ -11,17 +11,18 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.s_eda_app.singleton.ImageRequestSingleton
 import com.example.s_eda_app.R
-import com.example.s_eda_app.singleton.VolleySingleton
 import com.example.s_eda_app.activities.RecipeViewActivity
 import com.example.s_eda_app.entity.Dish
+import com.example.s_eda_app.singleton.ImageRequestSingleton
+import com.example.s_eda_app.singleton.VolleySingleton
 import java.io.File
 import java.io.FileOutputStream
 
 class DishesAdapter(var dishes:List<Dish>, var context: Context) :
     RecyclerView.Adapter<DishesAdapter.CardViewHolder>() {
 
+    var onItemClick:((Dish)-> Unit)?=null
     class CardViewHolder(view:View):RecyclerView.ViewHolder(view){
         val image: ImageView= view.findViewById(R.id.card_header_image)
         val title: TextView= view.findViewById(R.id.card_title)
@@ -29,6 +30,8 @@ class DishesAdapter(var dishes:List<Dish>, var context: Context) :
         val calories: TextView= view.findViewById(R.id.card_body)
         val id: TextView = view.findViewById(R.id.card_id)
         val button: Button= view.findViewById(R.id.card_button)
+
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardViewHolder {
@@ -66,8 +69,9 @@ class DishesAdapter(var dishes:List<Dish>, var context: Context) :
         val imageId= R.drawable.default_dish
         holder.image.setImageResource(imageId)
         holder.button.setOnClickListener {
-
+            onItemClick?.invoke(dishes[position])
         }
+
         holder.image.setOnClickListener{
             val intent1 = Intent(context, RecipeViewActivity::class.java)
 

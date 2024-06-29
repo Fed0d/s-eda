@@ -3,6 +3,7 @@ package com.example.s_eda_app
 import android.content.Context
 import android.content.Intent
 import com.example.s_eda_app.activities.MainActivity
+import com.example.s_eda_app.entity.DayDishes
 import com.example.s_eda_app.entity.User
 
 class SharedPrefManager private constructor(context: Context) {
@@ -25,7 +26,15 @@ class SharedPrefManager private constructor(context: Context) {
     init {
         ctx = context
     }
-
+    val ids: DayDishes
+        get(){
+            val sharedPreferences = ctx?.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
+            return DayDishes(
+                sharedPreferences!!.getInt(KEY_BREAKFAST, -1),
+                sharedPreferences.getInt(KEY_DINNER, -1),
+                sharedPreferences.getInt(KEY_LUNCH, -1),
+            )
+        }
     fun userLogin(user: User) {
         val sharedPreferences = ctx?.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
         val editor = sharedPreferences?.edit()
@@ -33,7 +42,28 @@ class SharedPrefManager private constructor(context: Context) {
         editor?.putString(KEY_USERNAME, user.nickName)
         editor?.apply()
     }
-
+    fun setBreakfastId (id:Int){
+        val sharedPreferences = ctx?.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
+        val editor = sharedPreferences?.edit()
+        editor?.putInt(KEY_BREAKFAST, id)
+    }
+    fun setDinnerId (id:Int){
+        val sharedPreferences = ctx?.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
+        val editor = sharedPreferences?.edit()
+        editor?.putInt(KEY_DINNER, id)
+    }
+    fun setLunchId (id:Int){
+        val sharedPreferences = ctx?.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
+        val editor = sharedPreferences?.edit()
+        editor?.putInt(KEY_LUNCH, id)
+    }
+    fun deleteDayDishes(){
+        val sharedPreferences = ctx?.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
+        val editor = sharedPreferences?.edit()
+        editor?.remove(KEY_BREAKFAST)?.apply()
+        editor?.remove(KEY_DINNER)?.apply()
+        editor?.remove(KEY_LUNCH)?.apply()
+    }
     fun logout() {
         val sharedPreferences = ctx?.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
         val editor = sharedPreferences?.edit()
@@ -46,6 +76,9 @@ class SharedPrefManager private constructor(context: Context) {
         private const val KEY_USERNAME = "keyusername"
         private const val KEY_ID = "keyid"
         private const val KEY_CALORIES = "calories"
+        private const val KEY_BREAKFAST = "breakfast"
+        private const val KEY_DINNER = "dinner"
+        private const val KEY_LUNCH = "lunch"
         private var mInstance: SharedPrefManager? = null
         private var ctx: Context? = null
         @Synchronized
