@@ -236,4 +236,10 @@
     <changeSet id="load_recipes_ingredients" author="fed0d">
         <loadData tableName="recipes_ingredients" file="db/changelog/data/recipes_ingredients.csv" separator=";"/>
     </changeSet>
+    <changeSet id="load_roles" author="fed0d">
+        <loadData tableName="roles" file="db/changelog/data/roles.csv" separator=";"/>
+    </changeSet>
+    <changeSet id="load_activities" author="fed0d">
+        <loadData tableName="activities" file="db/changelog/data/activities.csv" separator=";"/>
+    </changeSet>
 </databaseChangeLog>
