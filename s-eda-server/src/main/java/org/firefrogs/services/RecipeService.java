@@ -1,13 +1,11 @@
 package org.firefrogs.services;
 
-import org.firefrogs.entities.IngredientWithWeight;
-import org.firefrogs.entities.Recipe;
-import org.firefrogs.entities.RecipeIngredient;
+import org.firefrogs.DTO.IngredientWithWeightDTO;
+import org.firefrogs.DTO.RecipeDTO;
 
 import java.util.List;
 
 public interface RecipeService {
-    List<Recipe> findAllRecipes();
-    Recipe findRecipeById(Long id);
-    List<IngredientWithWeight> findIngredientsWithWeightByRecipeId(Long recipeId);
+    List<IngredientWithWeightDTO> findIngredientsWithWeightByRecipeId(Long recipeId);
+    List<RecipeDTO> findRecipesByDishTypeId(Long dishTypeId);
 }

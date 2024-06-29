@@ -1,51 +1,69 @@
 package org.firefrogs.services.impl;
 
 import lombok.AllArgsConstructor;
-import org.firefrogs.entities.Ingredient;
-import org.firefrogs.entities.IngredientWithWeight;
+import org.firefrogs.DTO.IngredientWithWeightDTO;
+import org.firefrogs.DTO.RecipeDTO;
 import org.firefrogs.entities.Recipe;
-import org.firefrogs.entities.RecipeIngredient;
 import org.firefrogs.repositories.RecipeIngredientRepository;
 import org.firefrogs.repositories.RecipeRepository;
 import org.firefrogs.services.RecipeService;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
-import java.util.Map;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
 public class RecipeServiceImpl implements RecipeService {
-    private final RecipeRepository repository;
+    private final RecipeRepository recipeRepository;
     private final RecipeIngredientRepository recipeIngredientRepository;
 
     @Override
-    public List<Recipe> findAllRecipes() {
-        List<Recipe> recipes = repository.findAll();
-
-        for (Recipe recipe : recipes)
-            recipe.setIngredientsWithWeight(findIngredientsWithWeightByRecipeId(recipe.getId()));
-
-        return recipes;
-    }
-
-    @Override
-    public Recipe findRecipeById(Long id) {
-        Recipe recipe = repository.findById(id).orElse(null);
-
-        if (recipe == null)
-            throw new RuntimeException("Recipe not found");
-
-        recipe.setIngredientsWithWeight(findIngredientsWithWeightByRecipeId(recipe.getId()));
-        return recipe;
-    }
-
-    @Override
-    public List<IngredientWithWeight> findIngredientsWithWeightByRecipeId(Long recipeId) {
-        return recipeIngredientRepository.findByRecipeId(recipeId).stream()
-                .map(recipeIngredient -> new IngredientWithWeight(recipeIngredient.getIngredient(), recipeIngredient.getWeight()))
+    public List<IngredientWithWeightDTO> findIngredientsWithWeightByRecipeId(Long recipeId) {
+        return recipeIngredientRepository.findByRecipeId(recipeId)
+                .stream()
+                .map(recipeIngredient -> new IngredientWithWeightDTO(recipeIngredient.getIngredient(), recipeIngredient.getWeight()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<RecipeDTO> findRecipesByDishTypeId(Long dishTypeId) {
+        List<Recipe> recipes = recipeRepository.findByDishTypeId(dishTypeId);
+        recipes.forEach(recipe -> recipe.setIngredientsWithWeight(findIngredientsWithWeightByRecipeId(recipe.getId())));
+        List<RecipeDTO> recipesDTO = recipes
+                .stream()
+                .map(this::mapToDTO)
+                .toList();
+
+        return recipesDTO;
+    }
+
+    private RecipeDTO mapToDTO(Recipe recipe) {
+        Integer totalWeight = 0;
+        Double totalCalories = 0.0;
+        Double totalProteins = 0.0;
+        Double totalFats = 0.0;
+        Double totalCarbohydrates = 0.0;
+
+        for (IngredientWithWeightDTO ingredientWithWeight : recipe.getIngredientsWithWeight()) {
+            totalWeight += ingredientWithWeight.getWeight();
+            totalCalories += ingredientWithWeight.getIngredient().getCalories();
+            totalProteins += ingredientWithWeight.getIngredient().getProteins();
+            totalFats += ingredientWithWeight.getIngredient().getFats();
+            totalCarbohydrates += ingredientWithWeight.getIngredient().getCarbohydrates();
+        }
+
+        DecimalFormat df = new DecimalFormat("#.#", new DecimalFormatSymbols(Locale.US));
+
+        totalCalories = Double.valueOf(df.format(totalCalories / totalWeight * 100));
+        totalProteins = Double.valueOf(df.format(totalProteins / totalWeight * 100));
+        totalFats = Double.valueOf(df.format(totalFats / totalWeight * 100));
+        totalCarbohydrates = Double.valueOf(df.format(totalCarbohydrates / totalWeight * 100));
+
+        return new RecipeDTO(recipe.getId(), recipe.getName(), recipe.getDescription(), recipe.getCookingTime(),
+                recipe.getAdditionalTime(), recipe.getPhotoLink(), totalCalories, totalProteins, totalFats, totalCarbohydrates);
     }
 }

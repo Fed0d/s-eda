@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.firefrogs.DTO.IngredientWithWeightDTO;
 
 import java.util.List;
 
@@ -28,5 +29,5 @@ public class Recipe {
     @JoinColumn(name = "dish_type_id", nullable = false)
     private DishType dishType;
     @Transient
-    private List<IngredientWithWeight> ingredientsWithWeight;
+    private List<IngredientWithWeightDTO> ingredientsWithWeight;
 }
