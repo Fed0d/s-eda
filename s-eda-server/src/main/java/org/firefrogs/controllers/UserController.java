@@ -24,7 +24,7 @@ public class UserController {
 
     @Operation(summary = "Изменение данных пользователя")
     @PatchMapping("/edit/{userId}")
-    public ResponseEntity<User> editUser(@PathVariable("userId") Long userId, @RequestBody UserEditRequest userEditDTO) {
-        return ResponseEntity.ok(userService.editUser(userId, userEditDTO));
+    public ResponseEntity<User> editUser(@PathVariable("userId") Long userId, @RequestBody UserEditRequest userEditRequest) {
+        return ResponseEntity.ok(userService.editUser(userId, userEditRequest));
     }
 }
