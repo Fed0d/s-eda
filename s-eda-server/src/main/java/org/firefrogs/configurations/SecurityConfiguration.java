@@ -19,7 +19,6 @@ import java.util.List;
 @AllArgsConstructor
 public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
     private final AuthenticationProvider authenticationProvider;
 
     @Bean

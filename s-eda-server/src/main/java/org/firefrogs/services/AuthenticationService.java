@@ -1,17 +1,17 @@
-package org.firefrogs.services.impl;
+package org.firefrogs.services;
 
 import lombok.AllArgsConstructor;
-import org.firefrogs.DTO.AuthenticateDTO;
-import org.firefrogs.DTO.AuthenticationDTO;
-import org.firefrogs.DTO.RegisterDTO;
-import org.firefrogs.entities.Role;
+import org.firefrogs.dto.AuthenticateRequest;
+import org.firefrogs.dto.AuthenticateResponse;
+import org.firefrogs.dto.RegisterRequest;
 import org.firefrogs.entities.User;
-import org.firefrogs.repositories.RoleRepository;
 import org.firefrogs.repositories.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import static org.firefrogs.entities.Role.ROLE_USER;
 
 @Service
 @AllArgsConstructor
@@ -20,34 +20,33 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    private final RoleRepository roleRepository;
 
-    public AuthenticationDTO register(RegisterDTO registerDTO) {
+    public AuthenticateResponse register(RegisterRequest registerRequest) {
         User user = User.builder()
-                .nickname(registerDTO.getNickname())
-                .password(passwordEncoder.encode(registerDTO.getPassword()))
-                .role(roleRepository.findByName(Role.RoleName.USER).orElseThrow())
+                .nickname(registerRequest.getNickname())
+                .password(passwordEncoder.encode(registerRequest.getPassword()))
+                .role(ROLE_USER)
                 .build();
 
         userRepository.save(user);
 
         String jwt = jwtService.generateToken(user);
-        return AuthenticationDTO.builder()
+        return AuthenticateResponse.builder()
                 .jwt(jwt)
                 .build();
     }
 
-    public AuthenticationDTO authenticate(AuthenticateDTO authenticateDTO) {
+    public AuthenticateResponse authenticate(AuthenticateRequest authenticateRequest) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                        authenticateDTO.getNickname(),
-                        authenticateDTO.getPassword()
+                        authenticateRequest.getNickname(),
+                        authenticateRequest.getPassword()
                 )
         );
 
-        User user = userRepository.findByNickname(authenticateDTO.getNickname()).orElseThrow();
+        User user = userRepository.findByNickname(authenticateRequest.getNickname()).orElseThrow();
 
         String jwt = jwtService.generateToken(user);
-        return AuthenticationDTO.builder()
+        return AuthenticateResponse.builder()
                 .jwt(jwt)
                 .build();
     }

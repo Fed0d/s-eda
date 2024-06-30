@@ -1,16 +1,16 @@
 package org.firefrogs.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.firefrogs.DTO.IngredientDTO;
+import lombok.*;
+import org.firefrogs.dto.IngredientResponse;
 
 import java.util.List;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "recipes")
 public class Recipe {
@@ -29,5 +29,5 @@ public class Recipe {
     @JoinColumn(name = "dish_type_id", nullable = false)
     private DishType dishType;
     @Transient
-    private List<IngredientDTO> ingredients;
+    private List<IngredientResponse> ingredients;
 }
