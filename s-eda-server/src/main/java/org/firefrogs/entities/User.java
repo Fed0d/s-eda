@@ -13,9 +13,9 @@ import java.util.List;
 @Setter
 @Builder
 @Entity
-@Table(name = "users")
-@RequiredArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "users")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,13 +24,13 @@ public class User implements UserDetails {
     private String nickname;
     @Column(nullable = false)
     private String password;
-    @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @JoinColumn(name = "role", nullable = false)
     private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.getName().toString()));
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override

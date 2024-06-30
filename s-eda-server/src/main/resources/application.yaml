@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/s_eda_db
+    username: postgres
+    password: root
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: true
+  liquibase:
+    change-log: db/changelog/changelog.xml
+token:
+  signing:
+    key: 1741B57C187D8ECC6B6465A6B45DB7CB9EFE665AE9D197FB8677F0136E4A1CF9

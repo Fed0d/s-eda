@@ -2,16 +2,6 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd">
-    <changeSet id="create_table_roles" author="fed0d">
-        <createTable tableName="roles">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="name" type="varchar">
-                <constraints nullable="false" unique="true"/>
-            </column>
-        </createTable>
-    </changeSet>
     <changeSet id="create_table_user" author="fed0d">
         <createTable tableName="users">
             <column name="id" type="bigint" autoIncrement="true">
@@ -23,17 +13,10 @@
             <column name="password" type="varchar">
                 <constraints nullable="false"/>
             </column>
-            <column name="role_id" type="bigint">
+            <column name="role" type="varchar">
                 <constraints nullable="false"/>
             </column>
         </createTable>
-    </changeSet>
-    <changeSet id="add_foreign_key_to_user" author="fed0d">
-        <addForeignKeyConstraint baseTableName="users"
-                                 baseColumnNames="role_id"
-                                 constraintName="fk_users_roles"
-                                 referencedTableName="roles"
-                                 referencedColumnNames="id"/>
     </changeSet>
     <changeSet id="create_table_activities" author="fed0d">
         <createTable tableName="activities">
@@ -235,9 +218,6 @@
     </changeSet>
     <changeSet id="load_recipes_ingredients" author="fed0d">
         <loadData tableName="recipes_ingredients" file="db/changelog/data/recipes_ingredients.csv" separator=";"/>
-    </changeSet>
-    <changeSet id="load_roles" author="fed0d">
-        <loadData tableName="roles" file="db/changelog/data/roles.csv" separator=";"/>
     </changeSet>
     <changeSet id="load_activities" author="fed0d">
         <loadData tableName="activities" file="db/changelog/data/activities.csv" separator=";"/>
