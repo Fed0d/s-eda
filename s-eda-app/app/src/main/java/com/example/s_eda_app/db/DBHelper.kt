@@ -2,16 +2,36 @@ package com.example.s_eda_app.db
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
+import android.database.sqlite.SQLiteCursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.text.format.DateUtils
+import android.widget.Toast
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.example.s_eda_app.Tools
+import com.example.s_eda_app.URLs
 import com.example.s_eda_app.entity.Dish
 import com.example.s_eda_app.entity.Ingredient
+import com.example.s_eda_app.volley.Requests
+import com.example.s_eda_app.volley.VolleySingleton
+import org.json.JSONException
+import org.json.JSONObject
+import java.text.SimpleDateFormat
+import java.util.Date
+
 class DBHelper(private val context: Context, private val factory: SQLiteDatabase.CursorFactory?) :
-    SQLiteOpenHelper(context, "disease", factory, 1){
+    SQLiteOpenHelper(context, DB_NAME, factory, 1){
     private var isFilled=false
+    private val tools=Tools()
+    private val requests=Requests(context)
     override fun onCreate(db: SQLiteDatabase?) {
-        val query = "CREATE TABLE dishes (id INT PRIMARY KEY, title TEXT, photoLink TEXT, time TEXT, addition_time TEXT, recipe TEXT, calories REAL, p REAL, f REAL, c REAL, numer INT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP )"
-        val query1= "CREATE TABLE ingredients (id INT PRIMARY KEY, name TEXT, weight REAL, calories REAL, p REAL, f REAL, c REAL, FOREIGN KEY(dish_id) REFERENCES dishes(id))"
+        val query =
+            "CREATE TABLE $DISHES_TABLE_NAME ($DISHES_ID_COL  INT PRIMARY KEY, $DISHES_TITLE_COl TEXT, $DISHES_PHOTO_COl TEXT, $DISHES_TIME_COl TEXT, $DISHES_ADDITIONAL_TIME_COl TEXT, $DISHES_RECIPE_COl TEXT, $DISHES_CALORIES_COl REAL, $DISHES_P_COl REAL, $DISHES_F_COl REAL, $DISHES_C_COl REAL, $DISHES_NUMER_COl INT, $DISHES_TIMESTAMP_COl DATETIME DEFAULT CURRENT_TIMESTAMP )"
+        val query1=
+            "CREATE TABLE $INGREDIENTS_TABLE_NAME ($INGREDIENTS_ID_COL INT PRIMARY KEY, $INGREDIENTS_TITLE_COl TEXT, $INGREDIENTS_WEIGHT_COl REAL, $INGREDIENTS_CALORIES_COl REAL, $INGREDIENTS_P_COl REAL, $INGREDIENTS_F_COl REAL, $INGREDIENTS_C_COl REAL, $INGREDIENTS_DISH_ID_COl INT, FOREIGN KEY($INGREDIENTS_DISH_ID_COl) REFERENCES $DISHES_TABLE_NAME($DISHES_ID_COL))"
         db!!.execSQL(query)
         db.execSQL(query1)
     }
@@ -21,25 +41,22 @@ class DBHelper(private val context: Context, private val factory: SQLiteDatabase
         onCreate(db)
 
     }
-    private fun fillDatabase(){
-
-    }
 
     private fun addDish(dish: Dish, numer :Int = 0){
         val values = ContentValues()
-        values.put("id", dish.id)
-        values.put("title", dish.title)
-        values.put("photoLink", dish.photoLink)
-        values.put("time", dish.time)
-        values.put("addition_time", dish.additionTime)
-        values.put("recipe", dish.recipe)
-        values.put("calories", dish.calories)
-        values.put("p", dish.p)
-        values.put("f", dish.f)
-        values.put("c", dish.c)
-        values.put("numer", numer)
+        values.put(DISHES_ID_COL, dish.id)
+        values.put(DISHES_TITLE_COl, dish.title)
+        values.put(DISHES_PHOTO_COl, dish.photoLink)
+        values.put(DISHES_TIME_COl, dish.time)
+        values.put(DISHES_ADDITIONAL_TIME_COl, dish.additionTime)
+        values.put(DISHES_RECIPE_COl, dish.recipe)
+        values.put(DISHES_CALORIES_COl, dish.calories)
+        values.put(DISHES_P_COl, dish.p)
+        values.put(DISHES_F_COl, dish.f)
+        values.put(DISHES_C_COl, dish.c)
+        values.put(DISHES_NUMER_COl, numer)
         val db = this.writableDatabase
-        db.insert("dishes", null, values)
+        db.insert(DISHES_TABLE_NAME, null, values)
         db.close()
     }
     public fun addAllDishes(dishes: List<Dish>){
@@ -49,17 +66,65 @@ class DBHelper(private val context: Context, private val factory: SQLiteDatabase
             t++
         }
     }
+    fun setIngredients(dishId :Int){
+        if (dishId != -1) {
+            val onGetMenuResponse:(String)-> Unit={ response ->
+                try {
+                    val s=tools.fixEncoding(response)
+                    val obj = JSONObject(s!!)
+                    if (!obj.getBoolean("error")) {
+                        Toast.makeText(
+                            context,
+                            obj.getString("message"),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        val ingrs = tools.fillTheIngrs(obj.getJSONArray("ingredients"))
+                        addAllIngredient(ingrs, dishId)
+
+                    } else {
+                        Toast.makeText(
+                            context,
+                            obj.getString("message"),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+            }
+            val stringRequest = requests.getIngredientsOfDish(dishId, onGetMenuResponse)
+            VolleySingleton.getInstance(context).addToRequestQueue(stringRequest)
+        }
+    }
+    public fun deleteDishes(){
+        val db=this.writableDatabase
+        val result = db.rawQuery("SELECT $DISHES_ID_COL FROM $DISHES_TABLE_NAME WHERE $DISHES_TIMESTAMP_COl <= strftime('%s', datetime('now', '-2 day'))", null)
+        val ids = mutableListOf<Int>()
+        if(result.moveToFirst()){
+            ids+=result.getInt(result.getColumnIndexOrThrow(DISHES_ID_COL))
+        }
+        while(result.moveToNext()){
+            ids+=result.getInt(result.getColumnIndexOrThrow(DISHES_ID_COL))
+        }
+        for (id in ids) {
+            db.rawQuery("DELETE FROM $INGREDIENTS_TABLE_NAME WHERE $INGREDIENTS_DISH_ID_COl='$id'", null)
+            db.rawQuery("DELETE FROM $DISHES_TABLE_NAME WHERE $DISHES_ID_COL='$id'", null)
+            tools.deleteImage(id, context)
+        }
+
+        result.close()
+        db.close()
+    }
     private fun addIngredient(ingredient: Ingredient, dishId :Int = 0){
         val values = ContentValues()
-        values.put("id", ingredient.id)
-        values.put("name", ingredient.name)
-        values.put("calories", ingredient.calories)
-        values.put("p", ingredient.p)
-        values.put("f", ingredient.f)
-        values.put("c", ingredient.c)
-        values.put("dish_id", dishId)
+        values.put(INGREDIENTS_TITLE_COl, ingredient.name)
+        values.put(INGREDIENTS_CALORIES_COl, ingredient.calories)
+        values.put(INGREDIENTS_P_COl, ingredient.p)
+        values.put(INGREDIENTS_F_COl, ingredient.f)
+        values.put(INGREDIENTS_C_COl, ingredient.c)
+        values.put(INGREDIENTS_DISH_ID_COl, dishId)
         val db = this.writableDatabase
-        db.insert("ingredients", null, values)
+        db.insert(INGREDIENTS_TABLE_NAME, null, values)
         db.close()
     }
     public fun addAllIngredient(ingredients: List<Ingredient>, dishId :Int = 0){
@@ -67,45 +132,98 @@ class DBHelper(private val context: Context, private val factory: SQLiteDatabase
             addIngredient(it, dishId)
         }
     }
-    public fun getDishesForToday(): MutableList<Dish> {
+    public fun getDishesForToday(): List<Dish> {
         val db = this.readableDatabase
         val ans = mutableListOf<Dish>()
-        val result = db.rawQuery("SELECT * from dishes where id in (select id from dishes order by timestamp desc limit 3) ", null)
+        val result = db.rawQuery("SELECT * from $DISHES_TABLE_NAME where $DISHES_ID_COL in (select $DISHES_ID_COL  from $DISHES_TABLE_NAME order by $DISHES_TIMESTAMP_COl desc limit 3) order by $DISHES_NUMER_COl ", null)
+        val r:String
         if( result.moveToFirst()){
-            val r=result.columnNames
-             ans+= mutableListOf( Dish(result.getInt(result.getColumnIndexOrThrow(r[0])),
-                result.getString(result.getColumnIndexOrThrow(r[1])),
-                result.getString(result.getColumnIndexOrThrow(r[2])),
-                result.getString(result.getColumnIndexOrThrow(r[3])),
-                result.getString(result.getColumnIndexOrThrow(r[4])),
-                result.getString(result.getColumnIndexOrThrow(r[5])),
-                result.getFloat(result.getColumnIndexOrThrow(r[6])),
-                result.getFloat(result.getColumnIndexOrThrow(r[7])),
-                result.getFloat(result.getColumnIndexOrThrow(r[8])),
-                result.getFloat(result.getColumnIndexOrThrow(r[9]))))
+            ans+= nextDish(result)
+            r=result.getString(result.getColumnIndexOrThrow(DISHES_TIMESTAMP_COl))
+            val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+            val currentDate = sdf.format(Date())
+            val splt=r.split("-"," ", ":")
+            val splt1=currentDate.split("/"," ", ":")
+            if((splt[2].toInt()<splt1[0].toInt()||splt[1].toInt()<splt1[1].toInt())&& splt[3].toInt()<22){
+                return emptyList()
+            }
         }
+        while(result.moveToNext()){
+            ans+= nextDish(result)
+        }
+        result.close()
         db.close()
         return ans
+    }
+    private fun nextDish(result: Cursor): MutableList<Dish>{
+    return mutableListOf( Dish(
+        result.getInt(result.getColumnIndexOrThrow(DISHES_ID_COL)),
+        result.getString(result.getColumnIndexOrThrow(DISHES_TITLE_COl)),
+        result.getString(result.getColumnIndexOrThrow(DISHES_PHOTO_COl)),
+        result.getString(result.getColumnIndexOrThrow(DISHES_TIME_COl)),
+        result.getString(result.getColumnIndexOrThrow(DISHES_ADDITIONAL_TIME_COl)),
+        result.getString(result.getColumnIndexOrThrow(DISHES_RECIPE_COl)),
+        result.getFloat(result.getColumnIndexOrThrow(DISHES_CALORIES_COl)),
+        result.getFloat(result.getColumnIndexOrThrow(DISHES_P_COl)),
+        result.getFloat(result.getColumnIndexOrThrow(DISHES_F_COl)),
+        result.getFloat(result.getColumnIndexOrThrow(DISHES_C_COl)),
+        result.getInt(result.getColumnIndexOrThrow(DISHES_NUMER_COl))))
     }
     public fun getIngredientsOfDish(id: Int): List<Ingredient>{
         val db = this.readableDatabase
         val ans = mutableListOf<Ingredient>()
-        val result = db.rawQuery("SELECT * from dishes where id in (select id from dishes order by timestamp desc limit 3) ", null)
+        val result = db.rawQuery("SELECT * from $INGREDIENTS_TABLE_NAME where $INGREDIENTS_DISH_ID_COl='$id' ", null)
         if( result.moveToFirst()){
-            val r=result.columnNames
-            ans+= mutableListOf( Ingredient(
-                result.getInt(result.getColumnIndexOrThrow(r[0])),
-                result.getString(result.getColumnIndexOrThrow(r[1])),
-                result.getFloat(result.getColumnIndexOrThrow(r[2])),
-                result.getFloat(result.getColumnIndexOrThrow(r[3])),
-                result.getFloat(result.getColumnIndexOrThrow(r[4])),
-                result.getFloat(result.getColumnIndexOrThrow(r[5])),
-                result.getFloat(result.getColumnIndexOrThrow(r[6]))))
+            ans+= nextIngredient(result)
         }
-        //FIXME добавить сбор остальных рецептов и ингридиентов
+        while(result.moveToNext()){
+            ans+= nextIngredient(result)
+        }
+        result.close()
         db.close()
         return ans
     }
+    fun nextIngredient(result: Cursor):MutableList<Ingredient>{
+        return mutableListOf( Ingredient(
+            result.getInt(result.getColumnIndexOrThrow(INGREDIENTS_ID_COL)),
+            result.getString(result.getColumnIndexOrThrow(INGREDIENTS_TITLE_COl)),
+            result.getFloat(result.getColumnIndexOrThrow(INGREDIENTS_WEIGHT_COl)),
+            result.getFloat(result.getColumnIndexOrThrow(INGREDIENTS_CALORIES_COl)),
+            result.getFloat(result.getColumnIndexOrThrow(INGREDIENTS_P_COl)),
+            result.getFloat(result.getColumnIndexOrThrow(INGREDIENTS_F_COl)),
+            result.getFloat(result.getColumnIndexOrThrow(INGREDIENTS_C_COl))))
+    }
 
+    companion object{
+        val DB_NAME="dishes_db"
+
+        val DISHES_TABLE_NAME = "dishes"
+
+        val DISHES_ID_COL = "id"
+        val DISHES_TITLE_COl = "title"
+        val DISHES_PHOTO_COl = "photoLink"
+        val DISHES_TIME_COl = "time"
+        val DISHES_ADDITIONAL_TIME_COl = "addition_time"
+        val DISHES_RECIPE_COl = "recipe"
+        val DISHES_CALORIES_COl = "calories"
+        val DISHES_P_COl = "p"
+        val DISHES_F_COl = "f"
+        val DISHES_C_COl = "c"
+        val DISHES_NUMER_COl = "numer"
+        val DISHES_TIMESTAMP_COl = "timestamp"
+
+
+        val INGREDIENTS_TABLE_NAME = "ingredients"
+
+        val INGREDIENTS_ID_COL = "id"
+        val INGREDIENTS_TITLE_COl = "name"
+        val INGREDIENTS_WEIGHT_COl = "weight"
+        val INGREDIENTS_CALORIES_COl = "calories"
+        val INGREDIENTS_P_COl = "p"
+        val INGREDIENTS_C_COl = "c"
+        val INGREDIENTS_F_COl = "f"
+        val INGREDIENTS_DISH_ID_COl = "dish_id"
+
+    }
 
 }

@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.s_eda_app.R
 import com.example.s_eda_app.activities.RecipeViewActivity
 import com.example.s_eda_app.entity.Dish
-import com.example.s_eda_app.singleton.ImageRequestSingleton
-import com.example.s_eda_app.singleton.VolleySingleton
+import com.example.s_eda_app.volley.Requests
+import com.example.s_eda_app.volley.VolleySingleton
 import java.io.File
 import java.io.FileOutputStream
 
@@ -23,6 +23,8 @@ class DishesAdapter(var dishes:List<Dish>, var context: Context) :
     RecyclerView.Adapter<DishesAdapter.CardViewHolder>() {
 
     var onItemClick:((Dish)-> Unit)?=null
+    var onImageClick:((Dish)-> Unit)?=null
+    val requests = Requests(context)
     class CardViewHolder(view:View):RecyclerView.ViewHolder(view){
         val image: ImageView= view.findViewById(R.id.card_header_image)
         val title: TextView= view.findViewById(R.id.card_title)
@@ -45,25 +47,24 @@ class DishesAdapter(var dishes:List<Dish>, var context: Context) :
 
     override fun onBindViewHolder(holder: CardViewHolder, position: Int) {
         holder.title.text= dishes[position].title
-        holder.time.text= StringBuilder(dishes[position].time).append(dishes[position].additionTime).toString()
-        holder.calories.text= dishes[position].calories.toString()
+        holder.time.text=
+            dishes[position].time?.let { StringBuilder(it).append(dishes[position].additionTime).toString() }
+        holder.calories.text= StringBuilder(dishes[position].calories.toString()).append(" ккал").toString()
         if(dishes[position].photoLink!=null){
-        val request = ImageRequestSingleton.getInstance(dishes[position].photoLink!!) { bitmap ->
-            try {
+            val onImageResponse:(Bitmap)-> Unit= { it -> try {
                 val fileName = dishes[position].id.toString() + ".jpeg"
                 var file = context.getDir("Images", Context.MODE_PRIVATE)
                 file = File(file, fileName)
                 val out = FileOutputStream(file)
-                holder.image.setImageBitmap(bitmap)
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 85, out)
+                holder.image.setImageBitmap(it)
+                it.compress(Bitmap.CompressFormat.JPEG, 85, out)
                 out.flush()
                 out.close()
                 Log.i("Seiggailion", "Image saved.")
             } catch (e: Exception) {
                 Log.i("Seiggailion", "Failed to save image.")
-            }
-
-        }
+            } }
+            val request = requests.getImagesRequest(dishes[position].photoLink!!, onImageResponse)
             VolleySingleton.getInstance(context).addToRequestQueue(request)
         }
         val imageId= R.drawable.default_dish
@@ -73,19 +74,8 @@ class DishesAdapter(var dishes:List<Dish>, var context: Context) :
         }
 
         holder.image.setOnClickListener{
-            val intent1 = Intent(context, RecipeViewActivity::class.java)
+            onImageClick?.invoke(dishes[position])
 
-            intent1.putExtra("id" , dishes[position].id)
-            intent1.putExtra("title" , dishes[position].title)
-            intent1.putExtra("time" , dishes[position].time)
-            intent1.putExtra("additionTime" , dishes[position].additionTime)
-            intent1.putExtra("calories" , dishes[position].calories)
-            intent1.putExtra("p" , dishes[position].p)
-            intent1.putExtra("f" , dishes[position].f)
-            intent1.putExtra("c" , dishes[position].c)
-            intent1.putExtra("recipe" , dishes[position].recipe)
-
-            context.startActivity(intent1)
         }
     }
 

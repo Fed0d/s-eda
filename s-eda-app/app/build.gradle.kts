@@ -39,7 +39,6 @@ android {
 }
 
 dependencies {
-
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("com.google.code.gson:gson:2.8.6")
     implementation("com.android.volley:volley:1.2.1")

@@ -1,30 +1,31 @@
 package com.example.s_eda_app.activities
 
-import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.AuthFailureError
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
 import com.example.s_eda_app.adapters.DishesAdapter
 import com.example.s_eda_app.R
-import com.example.s_eda_app.URLs
+import com.example.s_eda_app.Tools
 import com.example.s_eda_app.db.DBHelper
-import com.example.s_eda_app.singleton.VolleySingleton
+import com.example.s_eda_app.volley.VolleySingleton
 import com.example.s_eda_app.entity.Dish
+import com.example.s_eda_app.volley.Requests
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -37,183 +38,150 @@ class DishChoiceActivity : AppCompatActivity() {
     private lateinit var lunchAdapter: DishesAdapter
     private lateinit var dinnerAdapter: DishesAdapter
     private lateinit var confirmButton: Button
+    lateinit var progressBarBreakfast: ProgressBar
+    lateinit var progressBarLunch: ProgressBar
+    lateinit var progressBarDinner: ProgressBar
+    private val tools= Tools()
+    private val requests = Requests(this)
+    var counter=0
+    private var breakfastDish:Dish?=null
+    private var dinnerDish:Dish?=null
+    private var lunchDish:Dish?=null
+    private val myCoroutineScope=CoroutineScope(Dispatchers.IO)
+    private val myCoroutineScope1=CoroutineScope(Dispatchers.Main )
     override fun onCreate(savedInstanceState: Bundle?) {
+        var job:Job
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val db=DBHelper(applicationContext,null)
         setContentView(R.layout.activity_dish_choice)
-        var breakfastDish:Dish?=null
-        var dinnerDish:Dish?=null
-        var lunchDish:Dish?=null
         breakfastList = findViewById(R.id.breakfast_view)
         lunchList= findViewById(R.id.lunch_view)
         dinnerList= findViewById(R.id.dinner_view)
-        val breakfastMenu : MutableList<Dish>
-        val dinnerMenu : MutableList<Dish>
-        val lunchMenu: MutableList<Dish>
-        if(this.intent.getStringExtra("breakfast") == null
-            || this.intent.getStringExtra("dinner") == null
-            || this.intent.getStringExtra("lunch") == null){
-        val stringRequest = object : StringRequest(Request.Method.POST,
-            URLs.URL_TODAY_MENU,
-            Response.Listener { response ->
-                try {
-                    val obj = JSONObject(response)
-                    if(!obj.getBoolean("error")) {
-                        Toast.makeText(applicationContext, obj.getString("message"), Toast.LENGTH_SHORT).show()
-                        val menuJson = obj.getJSONObject("menu")
-                        val breakfastMenuRes = menuJson.getJSONArray("breakfast")
-                        val dinnerMenuRes  = menuJson.getJSONArray("dinner")
-                        val lunchMenuRes  = menuJson.getJSONArray("lunch")
-                        val intent1 = Intent(this, DishChoiceActivity::class.java)//FIXME обязательно ли перезапускать активити
-
-                        intent1.putExtra("breakfast" , breakfastMenuRes.toString())
-                        intent1.putExtra("dinner" , dinnerMenuRes.toString())
-                        intent1.putExtra("lunch" , lunchMenuRes.toString())
-
-                        startActivity(intent1)
-                    } else {
-                        Toast.makeText(applicationContext, obj.getString("message"), Toast.LENGTH_SHORT).show()
-                    }
-                } catch(e: JSONException) {
-                    e.printStackTrace()
+        progressBarBreakfast=findViewById(R.id.progress_bar_breakfast)
+        progressBarDinner=findViewById(R.id.progress_bar_dinner)
+        progressBarLunch=findViewById(R.id.progress_bar_lunch)
+        Handler().postDelayed(object : Runnable {
+            override fun run() {
+                if (counter <= 100) {
+                    progressBarBreakfast.progress = counter
+                    progressBarDinner.progress = counter
+                    progressBarLunch.progress = counter
+                    counter++
+                    Handler().postDelayed(this, 60)
+                } else {
+                    Handler().removeCallbacks(this)
                 }
-            },
-            Response.ErrorListener { error -> Toast.makeText(applicationContext, error.message, Toast.LENGTH_SHORT).show() }) {
-            @Throws(AuthFailureError::class)
-            override fun getParams(): Map<String, String> {
-                val params = HashMap<String, String>()
-                params["username"] = "user"
-                return params
+            }
+        }, 50)
+        val onGetMenuResponse:(String)-> Unit={ response ->
+            try {
+                val s=tools.fixEncoding(response)
+                val obj = JSONObject(s!!)
+
+                val breakfastMenu= tools.fillTheMenu(obj.getJSONArray("breakfast"))
+                val dinnerMenu = tools.fillTheMenu(obj.getJSONArray("dinner"))
+                val lunchMenu= tools.fillTheMenu(obj.getJSONArray("lunch"))
+                breakfastList.layoutManager= LinearLayoutManager(this,RecyclerView.HORIZONTAL,false)
+                breakfastAdapter= DishesAdapter(breakfastMenu,this)
+                breakfastList.adapter=breakfastAdapter
+                dinnerList.layoutManager= LinearLayoutManager(this,RecyclerView.HORIZONTAL,false)
+                dinnerAdapter= DishesAdapter(dinnerMenu,this)
+                dinnerList.adapter=dinnerAdapter
+                lunchList.layoutManager= LinearLayoutManager(this,RecyclerView.HORIZONTAL,false)
+                lunchAdapter= DishesAdapter(lunchMenu,this)
+                lunchList.adapter= lunchAdapter
+                progressBarBreakfast.visibility = View.GONE
+                progressBarDinner.visibility = View.GONE
+                progressBarLunch.visibility = View.GONE
+                breakfastList.visibility= View.VISIBLE
+                dinnerList.visibility= View.VISIBLE
+                lunchList.visibility= View.VISIBLE
+                breakfastAdapter.onItemClick={ onDishChoose(it, breakfastList, R.id.card_breakfast) }
+                dinnerAdapter.onItemClick={ onDishChoose(it, dinnerList, R.id.card_dinner) }
+                lunchAdapter.onItemClick={ onDishChoose(it, lunchList, R.id.card_lunch) }
+                job= myCoroutineScope.launch{
+                    val allDishes: MutableList<Dish> = mutableListOf<Dish>()
+                    allDishes+=breakfastMenu+dinnerMenu+lunchMenu
+                    for (dish in allDishes){
+                        val onGetIngredientsResponse:(String)-> Unit={response->
+                            val responseString=tools.fixEncoding(response)
+                            val ingrs = tools.fillTheIngrs(JSONArray(responseString!!))
+                            db.addAllIngredient(ingrs,dish.id)
+                        }
+                        VolleySingleton.getInstance(applicationContext).addToRequestQueue(requests.getIngredientsOfDish(dish.id,onGetIngredientsResponse))
+                    }
+                }
+                breakfastAdapter.onImageClick={ onRecipeView(it, job) }
+                lunchAdapter.onImageClick={onRecipeView(it, job)}
+                dinnerAdapter.onImageClick={onRecipeView(it, job)}
+
+            } catch(e: JSONException) {
+                e.printStackTrace()
             }
         }
+
+        val stringRequest = requests.getTodayMenu(onGetMenuResponse)
         VolleySingleton.getInstance(this).addToRequestQueue(stringRequest)
-        } else{
-            breakfastMenu= fillTheMenu(JSONArray(this.intent.getStringExtra("breakfast")))
-            dinnerMenu = fillTheMenu(JSONArray(this.intent.getStringExtra("dinner")))
-            lunchMenu= fillTheMenu(JSONArray(this.intent.getStringExtra("lunch")))
-            //breakfastList.layoutManager=LinearLayoutManager(this)
-            breakfastAdapter= DishesAdapter(breakfastMenu,this)
-            breakfastList.adapter=breakfastAdapter
-            dinnerAdapter= DishesAdapter(dinnerMenu,this)
-            dinnerList.adapter=dinnerAdapter
-            lunchAdapter= DishesAdapter(lunchMenu,this)
-            lunchList.adapter= lunchAdapter
-            breakfastAdapter.onItemClick={
-                breakfastList.visibility= View.GONE
-                findViewById<CardView>(R.id.card_breakfast).visibility=View.VISIBLE
-                findViewById<TextView>(R.id.card_title_breakfast).text=it.title
-                val finalTime=it.time+it.additionTime
-                findViewById<TextView>(R.id.card_subhead_breakfast).text=finalTime
-                findViewById<TextView>(R.id.card_body_breakfast).text=it.calories.toString()
-                try {
-                    val fileName = if (it.id == -1) {
-                        this.getDir("Images", Context.MODE_PRIVATE).path + "/" + "default_dish.png"
-                    } else {
-                        this.getDir("Images", Context.MODE_PRIVATE).path + "/" + it.id.toString() + ".jpeg"
-                    }
-                    val bitmap: Bitmap = BitmapFactory.decodeFile(fileName)
-                    findViewById<ImageView>(R.id.card_header_image_breakfast).setImageBitmap(bitmap)
-                    Log.i("Seiggailion", "Image loaded.")
-                } catch (e: Exception) {
-                    Log.i("Seiggailion", "Failed to load image.")
-                }
-                breakfastDish=it
-                findViewById<Button>(R.id.card_button_breakfast).setOnClickListener{
-                    breakfastDish=null
-                    breakfastList.visibility= View.VISIBLE
-                    findViewById<CardView>(R.id.card_breakfast).visibility=View.GONE
-
-                }
-
-            }
-            dinnerAdapter.onItemClick={
-                dinnerList.visibility= View.GONE
-                findViewById<CardView>(R.id.card_dinner).visibility=View.VISIBLE
-                findViewById<TextView>(R.id.card_title_dinner).text=it.title
-                val finalTime=it.time+it.additionTime
-                findViewById<TextView>(R.id.card_subhead_dinner).text=finalTime
-                findViewById<TextView>(R.id.card_body_dinner).text=it.calories.toString()
-                try {
-                    val fileName = if (it.id == -1) {
-                        this.getDir("Images", Context.MODE_PRIVATE).path + "/" + "default_dish.png"
-                    } else {
-                        this.getDir("Images", Context.MODE_PRIVATE).path + "/" + it.id.toString() + ".jpeg"
-                    }
-                    val bitmap: Bitmap = BitmapFactory.decodeFile(fileName)
-                    findViewById<ImageView>(R.id.card_header_image_dinner).setImageBitmap(bitmap)
-                    Log.i("Seiggailion", "Image loaded.")
-                } catch (e: Exception) {
-                    Log.i("Seiggailion", "Failed to load image.")
-                }
-                dinnerDish=it
-                findViewById<Button>(R.id.card_button_dinner).setOnClickListener{
-                    dinnerDish=null
-                    dinnerList.visibility= View.VISIBLE
-                    findViewById<CardView>(R.id.card_dinner).visibility=View.GONE
-
-                }
-            }
-            lunchAdapter.onItemClick={
-                lunchList.visibility= View.GONE
-                findViewById<CardView>(R.id.card_lunch).visibility=View.VISIBLE
-                findViewById<TextView>(R.id.card_title_lunch).text=it.title
-                val finalTime=it.time+it.additionTime
-                findViewById<TextView>(R.id.card_subhead_lunch).text=finalTime
-                findViewById<TextView>(R.id.card_body_lunch).text=it.calories.toString()
-                try {
-                    val fileName = if (it.id == -1) {
-                        this.getDir("Images", Context.MODE_PRIVATE).path + "/" + "default_dish.png"
-                    } else {
-                        this.getDir("Images", Context.MODE_PRIVATE).path + "/" + it.id.toString() + ".jpeg"
-                    }
-                    val bitmap: Bitmap = BitmapFactory.decodeFile(fileName)
-                    findViewById<ImageView>(R.id.card_header_image_lunch).setImageBitmap(bitmap)
-                    Log.i("Seiggailion", "Image loaded.")
-                } catch (e: Exception) {
-                    Log.i("Seiggailion", "Failed to load image.")
-                }
-                lunchDish=it
-                findViewById<Button>(R.id.card_button_lunch).setOnClickListener{
-                    lunchDish=null
-                    lunchList.visibility= View.VISIBLE
-                    findViewById<CardView>(R.id.card_lunch).visibility=View.GONE
-
-                }
-
-            }
-        }
         confirmButton=findViewById(R.id.confirm_menu_button)
         confirmButton.setOnClickListener {
             if((lunchDish==null)||(dinnerDish==null)||(breakfastDish==null)){
                 Toast.makeText(applicationContext, "Выберите все блюда", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            val db=DBHelper(applicationContext,null)
             db.addAllDishes(listOf(breakfastDish!!,lunchDish!!,dinnerDish!!))
-            //TODO создать страницу просмотра дневного рациона
+            db.setIngredients(breakfastDish!!.id)
+            db.setIngredients(lunchDish!!.id)
+            db.setIngredients(dinnerDish!!.id)
+            finish()
+            startActivity(Intent(this,TodayMenuActivity::class.java))
         }
 
-    }
-    fun fillTheMenu(menu: JSONArray) : MutableList<Dish>{
-        val ans= mutableListOf<Dish>()
-        var i =0
-        while (!menu.isNull(i)){
-            val dish = Dish(
-                menu.getJSONObject(i).getInt("id"),
-                menu.getJSONObject(i).getString("title"),
-                menu.getJSONObject(i).getString("photoLink"),
-                menu.getJSONObject(i).getString("time"),
-                menu.getJSONObject(i).getString("additionTime"),
-                menu.getJSONObject(i).getString("recipe"),
-                menu.getJSONObject(i).getString("calories").toFloat(),
-                menu.getJSONObject(i).getString("p").toFloat(),
-                menu.getJSONObject(i).getString("f").toFloat(),
-                menu.getJSONObject(i).getString("c").toFloat())
-            i+=1
-            ans+= mutableListOf(dish)
-        }
-        return ans
 
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        myCoroutineScope.cancel()
+        myCoroutineScope1.cancel()
+    }
+    private fun onDishChoose(dish: Dish, list:RecyclerView, id: Int){
+        list.visibility= View.GONE
+        val cardView=findViewById<CardView>(id)
+        cardView.visibility=View.VISIBLE
+        cardView.findViewById<TextView>(R.id.card_title_default).text=dish.title
+        val finalTime=dish.time+dish.additionTime
+        cardView.findViewById<TextView>(R.id.card_subhead_default).text=finalTime
+        cardView.findViewById<TextView>(R.id.card_body_default).text=dish.calories.toString()
+        cardView.findViewById<ImageView>(R.id.card_header_image_default).setImageBitmap(tools.getBitmapForId(dish.id, this))
+        when(id){
+            R.id.card_lunch->lunchDish=dish
+            R.id.card_breakfast->breakfastDish=dish
+            R.id.card_dinner->dinnerDish= dish
+        }
+        cardView.findViewById<TextView>(R.id.card_button_default).setOnClickListener{
+            when(id){
+                R.id.card_lunch->lunchDish=null
+                R.id.card_breakfast->breakfastDish=null
+                R.id.card_dinner->dinnerDish=null
+            }
+            list.visibility= View.VISIBLE
+            cardView.visibility=View.GONE
+
+        }
+    }
+
+    private fun onRecipeView(dish: Dish, job: Job){
+       /* val intent = Intent(applicationContext, WaitActivity::class.java)
+        applicationContext.startActivity(intent)*/
+        myCoroutineScope1.launch {
+            val intent1 = Intent(applicationContext, RecipeViewActivity::class.java)
+            intent1.putExtra("dish", dish)
+            intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            job.join()
+            applicationContext.startActivity(intent1)
+        }
+    }
+
 
 }

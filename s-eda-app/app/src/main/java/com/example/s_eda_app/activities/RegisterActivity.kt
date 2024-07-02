@@ -9,18 +9,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.AuthFailureError
-import com.android.volley.Request
-import com.android.volley.Response
 import com.example.s_eda_app.R
-import com.example.s_eda_app.SharedPrefManager
-import com.example.s_eda_app.URLs
+import com.example.s_eda_app.db.SharedPrefManager
 import com.example.s_eda_app.entity.User
-import com.example.s_eda_app.singleton.VolleySingleton
+import com.example.s_eda_app.volley.Requests
+import com.example.s_eda_app.volley.VolleySingleton
 import org.json.JSONException
 import org.json.JSONObject
-import java.util.HashMap
 
 
 class RegisterActivity : AppCompatActivity() {
@@ -29,6 +24,7 @@ class RegisterActivity : AppCompatActivity() {
     internal lateinit var userPassword2Field: EditText
     internal lateinit var regButton: Button
     internal lateinit var linkToAuth: TextView
+    val requests = Requests(applicationContext)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -70,38 +66,28 @@ class RegisterActivity : AppCompatActivity() {
             userPassword2Field.requestFocus()
             return
         }
-        val stringRequest = object : StringRequest(Request.Method.POST,
-            URLs.URL_REGISTER,
-            Response.Listener { response ->
-                try {
-                    val obj = JSONObject(response)
-                    if(!obj.getBoolean("error")) {
-                        Toast.makeText(applicationContext, obj.getString("message"), Toast.LENGTH_SHORT).show()
-                        val userJson = obj.getJSONObject("user")
-                        val user = User(
-                            userJson.getInt("id"),
-                            userJson.getString("username"),
-                            userJson.getInt("calories")
-                        )
-                        SharedPrefManager.getInstance(applicationContext).userLogin(user)
-                        finish()
-                        startActivity(Intent(applicationContext, MainActivity::class.java))
-                    } else {
-                        Toast.makeText(applicationContext, obj.getString("message"), Toast.LENGTH_SHORT).show()
-                    }
-                } catch(e: JSONException) {
-                    e.printStackTrace()
+        val onRegisterResponse:(String)-> Unit={ response ->
+            try {
+                val obj = JSONObject(response)
+                if(!obj.getBoolean("error")) {
+                    Toast.makeText(applicationContext, obj.getString("message"), Toast.LENGTH_SHORT).show()
+                    val userJson = obj.getJSONObject("user")
+                    val user = User(
+                        userJson.getInt("id"),
+                        userJson.getString("username"),
+                        userJson.getInt("calories")
+                    )
+                    SharedPrefManager.getInstance(applicationContext).userLogin(user)
+                    finish()
+                    startActivity(Intent(applicationContext, MainActivity::class.java))
+                } else {
+                    Toast.makeText(applicationContext, obj.getString("message"), Toast.LENGTH_SHORT).show()
                 }
-            },
-            Response.ErrorListener { error -> Toast.makeText(applicationContext, error.message, Toast.LENGTH_SHORT).show() }) {
-            @Throws(AuthFailureError::class)
-            override fun getParams(): Map<String, String> {
-                val params = HashMap<String, String>()
-                params["username"] = username
-                params["password"] = password
-                return params
+            } catch(e: JSONException) {
+                e.printStackTrace()
             }
         }
+        val stringRequest = requests.getRegisterRequest(username, password, onRegisterResponse)
         VolleySingleton.getInstance(this).addToRequestQueue(stringRequest)
     }
 }

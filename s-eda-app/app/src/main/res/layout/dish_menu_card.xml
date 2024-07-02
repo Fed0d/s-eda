@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="5dp"
+    android:paddingVertical="10dp"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageView
+        android:id="@+id/dish_menu_image"
+        android:layout_marginHorizontal="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:src="@drawable/default_dish"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/image_of_a_dish" />
+
+    <TextView
+        android:id="@+id/dish_menu_title"
+        android:textSize="25sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/inter_semibold" />
+
+    <TextView
+        android:id="@+id/dish_menu_subhead"
+        android:textSize="20sp"
+        style="@style/TextAppearance.MaterialComponents.Subtitle2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="sans-serif-medium"
+        />
+    <TextView
+        android:fontFamily="@font/inter"
+        android:id="@+id/dish_menu_body"
+        android:textSize="15sp"
+        style="@style/TextAppearance.MaterialComponents.Body1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="end"/>
+
+    <include
+        android:id="@+id/dish_menu_ingredient_table"
+        layout="@layout/ingredient_table"
+        tools:layout_editor_absoluteX="5dp" />
+
+</LinearLayout>

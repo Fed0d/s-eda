@@ -91,4 +91,17 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
+    <string name="_100">100 г</string>
+    <string name="weight">Вес</string>
+    <string name="carbohydrates">Углеводы</string>
+    <string name="fats">Жиры</string>
+    <string name="proteins">Белки</string>
+    <string name="calories">Калории</string>
+    <string name="image_of_a_dish">Image of a dish</string>
+    <string name="back">Back</string>
+    <string name="breakfast">Завтрак</string>
+    <string name="cancel">Отменить</string>
+    <string name="lunch">Обед</string>
+    <string name="dinner">Ужин</string>
+    <string name="confirm_menu">Подтвердить меню</string>
 </resources>

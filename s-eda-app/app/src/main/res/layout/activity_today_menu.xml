@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.TodayMenuActivity"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/inter_bold"
+        android:text="@string/breakfast"
+        android:textSize="40sp" />
+    <include
+        android:id="@+id/breakfast_dish_menu"
+        layout="@layout/dish_menu_card"
+        tools:layout_editor_absoluteX="5dp" />
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginTop="15dp"
+    android:fontFamily="@font/inter_bold"
+    android:text="@string/lunch"
+    android:textSize="40sp" />
+    <include
+        android:id="@+id/lunch_dish_menu"
+        layout="@layout/dish_menu_card"
+        tools:layout_editor_absoluteX="5dp" />
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginTop="15dp"
+    android:fontFamily="@font/inter_bold"
+    android:text="@string/dinner"
+    android:textSize="40sp" />
+        <include
+        android:id="@+id/dinner_dish_menu"
+        layout="@layout/dish_menu_card"
+        tools:layout_editor_absoluteX="5dp"
+        />
+        <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"/>
+    </LinearLayout>
+</ScrollView>

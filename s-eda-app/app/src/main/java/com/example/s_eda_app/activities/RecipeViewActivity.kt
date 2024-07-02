@@ -1,44 +1,41 @@
 package com.example.s_eda_app.activities
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import android.widget.Button
-import android.widget.EditText
+import android.view.Gravity
+import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TableLayout
+import android.widget.TableRow
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
-import com.example.s_eda_app.adapters.IngredientsAdapter
 import com.example.s_eda_app.R
-import com.example.s_eda_app.URLs
-import com.example.s_eda_app.singleton.VolleySingleton
+import com.example.s_eda_app.Tools
+import com.example.s_eda_app.db.DBHelper
+import com.example.s_eda_app.entity.Dish
 import com.example.s_eda_app.entity.Ingredient
-import org.json.JSONArray
-import org.json.JSONException
-import org.json.JSONObject
+import com.example.s_eda_app.volley.Requests
 
 class RecipeViewActivity : AppCompatActivity() {
-    internal lateinit var titleField: EditText
-    internal lateinit var timeField: EditText
-    internal lateinit var backButton: Button
+    internal lateinit var titleField: TextView
+    internal lateinit var timeField: TextView
+    internal lateinit var backButton: ImageButton
     internal lateinit var calories: TextView
     internal lateinit var p: TextView
     internal lateinit var f: TextView
     internal lateinit var c: TextView
     internal lateinit var recipe: TextView
     internal lateinit var img: ImageView
-    internal lateinit var ingredientsList: RecyclerView
+    internal lateinit var tblLayout: TableLayout
+    private val tools = Tools()
+    private val requests= Requests(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val db= DBHelper(applicationContext,null)
         setContentView(R.layout.activity_recipe_view)
         titleField = findViewById(R.id.card_title_big)
         timeField = findViewById(R.id.card_subhead_big)
@@ -49,93 +46,53 @@ class RecipeViewActivity : AppCompatActivity() {
         c = findViewById(R.id.c_card_big)
         recipe = findViewById(R.id.card_recipe_big)
         img = findViewById(R.id.card_header_image_big)
-        ingredientsList= findViewById(R.id.card_ingredient_view)
-        titleField.setText(this.intent.getStringExtra("title"))
-        timeField.setText(
-            StringBuilder(this.intent.getStringExtra("time")!!).append(
-                this.intent.getStringExtra(
-                    "additionTime"
-                )
-            ).toString()
-        )
-        calories.text = this.intent.getFloatExtra("calories", 0.0f).toString()
-        p.text = this.intent.getFloatExtra("p", 0.0f).toString()
-        f.text = this.intent.getFloatExtra("f", 0.0f).toString()
-        c.text = this.intent.getFloatExtra("c", 0.0f).toString()
-        recipe.text = this.intent.getStringExtra("recipe")
-        val id = this.intent.getIntExtra("id", -1)
-
-
-        try {
-            val fileName = if (id == -1) {
-                this.getDir("Images", Context.MODE_PRIVATE).path + "/" + "default_dish.png"
-            } else {
-                this.getDir("Images", Context.MODE_PRIVATE).path + "/" + id.toString() + ".jpeg"
-            }
-            val bitmap: Bitmap = BitmapFactory.decodeFile(fileName)
-            img.setImageBitmap(bitmap)
-            Log.i("Seiggailion", "Image loaded.")
-        } catch (e: Exception) {
-            Log.i("Seiggailion", "Failed to load image.")
+        var dish:Dish?
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            dish=this.intent.getParcelableExtra("dish", Dish::class.java)
+        } else{
+            dish=intent.getParcelableExtra<Dish>("dish")
         }
+        titleField.text = dish!!.title
+        timeField.text = StringBuilder(dish.time!!).append(dish.additionTime).toString()
+        calories.text = dish.calories.toString()
+        p.text = dish.p.toString()
+        f.text = dish.f.toString()
+        c.text = dish.c.toString()
+        recipe.text = dish.recipe
+        val id = dish.id
+
+        img.setImageBitmap(tools.getBitmapForId(id,this))
+
         backButton.setOnClickListener {
-            finish() //FIXME будет ли оно возварщать к прошлому запросу?
+            finish()
         }
-        if (id != -1) {
-            val stringRequest = object : StringRequest(
-                Request.Method.GET, URLs.URL_INGREDIENTS_OF_DISH + id.toString(),
-                Response.Listener { response ->
-                    try {
-                        val obj = JSONObject(response)
-                        if (!obj.getBoolean("error")) {
-                            Toast.makeText(
-                                applicationContext,
-                                obj.getString("message"),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            val ingrs = fillTheIngrs(obj.getJSONArray("ingredients"))
-                            ingredientsList.adapter=
-                                IngredientsAdapter(ingrs,this)//FIXME будет ли работать без перезапуска
+        if ((id != -1)) {
+            tblLayout = findViewById(R.id.ingredient_table);
+            val ingrs =db.getIngredientsOfDish(id)
+            var i=1
+            for (el:Ingredient in  ingrs){
+                val tableRow =  TableRow(this);
+                tableRow.setLayoutParams(ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT));
 
-                        } else {
-                            Toast.makeText(
-                                applicationContext,
-                                obj.getString("message"),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    } catch (e: JSONException) {
-                        e.printStackTrace()
-                    }
-                },
-                Response.ErrorListener { error ->
-                    Toast.makeText(
-                        applicationContext,
-                        error.message,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }) {
+
+                tableRow.addView(getNewCellWithParams(el.name!!), 0);
+                tableRow.addView(getNewCellWithParams(el.weight.toString(), 40), 1);
+                tableRow.addView(getNewCellWithParams(el.calories.toString(), 40), 2);
+                tblLayout.addView(tableRow, i);
+                i++
             }
-            VolleySingleton.getInstance(this).addToRequestQueue(stringRequest)
         }
     }
-    fun fillTheIngrs(ingrs: JSONArray): MutableList<Ingredient> {
-        val ans = mutableListOf<Ingredient>()
-        var i = 0
-        while (!ingrs.isNull(i)) {
-            val ingr = Ingredient(
-                ingrs.getJSONObject(i).getInt("id"),
-                ingrs.getJSONObject(i).getString("name"),
-                ingrs.getJSONObject(i).getString("weight").toFloat(),
-                ingrs.getJSONObject(i).getString("calories").toFloat(),
-                ingrs.getJSONObject(i).getString("p").toFloat(),
-                ingrs.getJSONObject(i).getString("f").toFloat(),
-                ingrs.getJSONObject(i).getString("c").toFloat()
-            )
-            i += 1
-            ans += mutableListOf(ingr)
-        }
-        return ans
+    fun getNewCellWithParams(text:String, width:Int =110):TextView{
+        val cellView:TextView = TextView(this);
+        cellView.text=text
+        cellView.setGravity(Gravity.CENTER)
+        cellView.width=width
+        cellView.setPadding(3,3,3,3)
+        cellView.textSize=20.0f
+        return cellView
+    }
 
-    }
 }

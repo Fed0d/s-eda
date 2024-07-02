@@ -1,9 +1,8 @@
-package com.example.s_eda_app
+package com.example.s_eda_app.db
 
 import android.content.Context
 import android.content.Intent
 import com.example.s_eda_app.activities.MainActivity
-import com.example.s_eda_app.entity.DayDishes
 import com.example.s_eda_app.entity.User
 
 class SharedPrefManager private constructor(context: Context) {
@@ -26,15 +25,7 @@ class SharedPrefManager private constructor(context: Context) {
     init {
         ctx = context
     }
-    val ids: DayDishes
-        get(){
-            val sharedPreferences = ctx?.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
-            return DayDishes(
-                sharedPreferences!!.getInt(KEY_BREAKFAST, -1),
-                sharedPreferences.getInt(KEY_DINNER, -1),
-                sharedPreferences.getInt(KEY_LUNCH, -1),
-            )
-        }
+
     fun userLogin(user: User) {
         val sharedPreferences = ctx?.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
         val editor = sharedPreferences?.edit()
