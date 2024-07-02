@@ -22,7 +22,7 @@ public class RecipeController {
 
     @Operation(summary = "Получение ингредиентов с их весом по id рецепта")
     @GetMapping("/ingredients/{recipeId}")
-    public ResponseEntity<List<IngredientResponse>>getIngredientsWithWeightByRecipeId(@PathVariable("recipeId") Long recipeId) {
+    public ResponseEntity<List<IngredientResponse>> getIngredientsWithWeightByRecipeId(@PathVariable("recipeId") Long recipeId) {
         List<IngredientResponse> ingredients = recipeService.findIngredientsByRecipeId(recipeId);
 
         return ResponseEntity.ok(ingredients);

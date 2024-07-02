@@ -2,6 +2,7 @@ package org.firefrogs.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.firefrogs.dto.UserEditRequest;
 import org.firefrogs.entities.User;
@@ -24,7 +25,7 @@ public class UserController {
 
     @Operation(summary = "Изменение данных пользователя")
     @PatchMapping("/edit/{userId}")
-    public ResponseEntity<User> editUser(@PathVariable("userId") Long userId, @RequestBody UserEditRequest userEditRequest) {
+    public ResponseEntity<User> editUser(@PathVariable("userId") Long userId, @Valid @RequestBody UserEditRequest userEditRequest) {
         return ResponseEntity.ok(userService.editUser(userId, userEditRequest));
     }
 }
