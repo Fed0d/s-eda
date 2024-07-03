@@ -15,8 +15,8 @@ class Dish(val id: Int,
            val p:Float?,
            val f:Float?,
            val c:Float?,
-          val iter:Int = 0): Parcelable {
-
+           val iter:Int = 0,
+           val day:Int=0):  Parcelable{
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readString(),
@@ -28,6 +28,7 @@ class Dish(val id: Int,
         parcel.readValue(Float::class.java.classLoader) as? Float,
         parcel.readValue(Float::class.java.classLoader) as? Float,
         parcel.readValue(Float::class.java.classLoader) as? Float,
+        parcel.readInt(),
         parcel.readInt()
     ) {
     }
@@ -44,6 +45,7 @@ class Dish(val id: Int,
         parcel.writeValue(f)
         parcel.writeValue(c)
         parcel.writeInt(iter)
+        parcel.writeInt(day)
     }
 
     override fun describeContents(): Int {
@@ -59,5 +61,6 @@ class Dish(val id: Int,
             return arrayOfNulls(size)
         }
     }
+
 
 }

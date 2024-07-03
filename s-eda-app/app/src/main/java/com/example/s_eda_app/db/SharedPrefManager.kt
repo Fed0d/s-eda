@@ -9,17 +9,17 @@ class SharedPrefManager private constructor(context: Context) {
     val isLoggedIn: Boolean
         get() {
             val sharedPreferences = ctx?.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
-            return sharedPreferences?.getString(KEY_USERNAME, null) != null
+            return sharedPreferences?.getString(KEY_JWT, null) != null
         }
 
     val user: User
         get() {
             val sharedPreferences = ctx?.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
             return User(
-                sharedPreferences!!.getInt(KEY_ID, -1),
-                sharedPreferences.getString(KEY_USERNAME, null),
-                sharedPreferences.getInt(KEY_CALORIES, -1),
-
+                sharedPreferences?.getString(KEY_USERNAME, null),
+                sharedPreferences?.getString(KEY_PASS, null),
+                sharedPreferences?.getInt(KEY_CALORIES, -1),
+                sharedPreferences?.getString(KEY_JWT, null)
             )
         }
     init {
@@ -29,31 +29,25 @@ class SharedPrefManager private constructor(context: Context) {
     fun userLogin(user: User) {
         val sharedPreferences = ctx?.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
         val editor = sharedPreferences?.edit()
-        editor?.putInt(KEY_ID, user.id)
         editor?.putString(KEY_USERNAME, user.nickName)
+        editor?.putString(KEY_PASS, user.password)
+        if(user.calories==null){
+            editor?.putInt(KEY_CALORIES, -1)
+        }else{
+        editor?.putInt(KEY_CALORIES, user.calories!!)
+        }
+        editor?.putString(KEY_JWT, user.jwt)
         editor?.apply()
     }
-    fun setBreakfastId (id:Int){
+    fun setNewJWT(jwt: String){
         val sharedPreferences = ctx?.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
         val editor = sharedPreferences?.edit()
-        editor?.putInt(KEY_BREAKFAST, id)
+        editor?.remove(KEY_JWT)?.apply()
+        editor?.putString(KEY_JWT, user.jwt)?.apply()
     }
-    fun setDinnerId (id:Int){
+    fun getJWT():String?{
         val sharedPreferences = ctx?.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
-        val editor = sharedPreferences?.edit()
-        editor?.putInt(KEY_DINNER, id)
-    }
-    fun setLunchId (id:Int){
-        val sharedPreferences = ctx?.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
-        val editor = sharedPreferences?.edit()
-        editor?.putInt(KEY_LUNCH, id)
-    }
-    fun deleteDayDishes(){
-        val sharedPreferences = ctx?.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
-        val editor = sharedPreferences?.edit()
-        editor?.remove(KEY_BREAKFAST)?.apply()
-        editor?.remove(KEY_DINNER)?.apply()
-        editor?.remove(KEY_LUNCH)?.apply()
+        return sharedPreferences?.getString(KEY_JWT, "")
     }
     fun logout() {
         val sharedPreferences = ctx?.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
@@ -64,12 +58,10 @@ class SharedPrefManager private constructor(context: Context) {
     }
     companion object {
         private const val SHARED_PREF_NAME = "volleyregisterlogin"
-        private const val KEY_USERNAME = "keyusername"
-        private const val KEY_ID = "keyid"
+        private const val KEY_USERNAME = "username"
         private const val KEY_CALORIES = "calories"
-        private const val KEY_BREAKFAST = "breakfast"
-        private const val KEY_DINNER = "dinner"
-        private const val KEY_LUNCH = "lunch"
+        private const val KEY_PASS = "password"
+        private const val KEY_JWT = "jwt"
         private var mInstance: SharedPrefManager? = null
         private var ctx: Context? = null
         @Synchronized

@@ -19,16 +19,17 @@ import org.json.JSONObject
 
 
 class RegisterActivity : AppCompatActivity() {
-    internal lateinit var userNameField: EditText
-    internal lateinit var userPasswordField: EditText
-    internal lateinit var userPassword2Field: EditText
-    internal lateinit var regButton: Button
-    internal lateinit var linkToAuth: TextView
-    val requests = Requests(applicationContext)
+    private lateinit var userNameField: EditText
+    private lateinit var userPasswordField: EditText
+    private lateinit var userPassword2Field: EditText
+    private lateinit var regButton: Button
+    private lateinit var linkToAuth: TextView
+    private lateinit var requests: Requests
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_register)
+        requests= Requests(applicationContext)
         userNameField = findViewById(R.id.username_reg_field)
         userPasswordField = findViewById(R.id.password_reg_field)
         userPassword2Field= findViewById(R.id.password2_reg_field)
@@ -43,9 +44,9 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
     private fun registerUser() {
-        val username =  userNameField.text.toString().trim { it <= ' ' }
-        val password = userPasswordField.text.toString().trim { it <= ' ' }
-        val password2 = userPassword2Field.text.toString().trim { it <= ' ' }
+        val username =  userNameField.text.toString().trim()
+        val password = userPasswordField.text.toString().trim()
+        val password2 = userPassword2Field.text.toString().trim()
         if(TextUtils.isEmpty(username)) {
             userNameField.error = "Введите имя пользователя"
             userNameField.requestFocus()
@@ -66,29 +67,25 @@ class RegisterActivity : AppCompatActivity() {
             userPassword2Field.requestFocus()
             return
         }
-        val onRegisterResponse:(String)-> Unit={ response ->
+        val onRegisterResponse:(JSONObject)-> Unit={ response ->
             try {
-                val obj = JSONObject(response)
-                if(!obj.getBoolean("error")) {
-                    Toast.makeText(applicationContext, obj.getString("message"), Toast.LENGTH_SHORT).show()
-                    val userJson = obj.getJSONObject("user")
-                    val user = User(
-                        userJson.getInt("id"),
-                        userJson.getString("username"),
-                        userJson.getInt("calories")
-                    )
-                    SharedPrefManager.getInstance(applicationContext).userLogin(user)
-                    finish()
-                    startActivity(Intent(applicationContext, MainActivity::class.java))
-                } else {
-                    Toast.makeText(applicationContext, obj.getString("message"), Toast.LENGTH_SHORT).show()
-                }
+                val jwt = response.getString("jwt")
+                val user = User(
+                    username,
+                    password,
+                    null,
+                    jwt
+                )
+                SharedPrefManager.getInstance(applicationContext).userLogin(user)
+                finish()
+                startActivity(Intent(applicationContext, MainActivity::class.java))
+
             } catch(e: JSONException) {
                 e.printStackTrace()
             }
         }
-        val stringRequest = requests.getRegisterRequest(username, password, onRegisterResponse)
-        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest)
+        val jsonObjectRequest = requests.getRegisterRequest(username, password, onRegisterResponse)
+        VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest)
     }
 }
 

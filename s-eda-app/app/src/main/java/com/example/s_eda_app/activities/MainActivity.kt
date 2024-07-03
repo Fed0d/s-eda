@@ -21,10 +21,10 @@ import org.json.JSONObject
 
 
 class MainActivity : AppCompatActivity() {
-    internal lateinit var userNameField: EditText
-    internal lateinit var userPasswordField: EditText
-    internal lateinit var authButton: Button
-    internal lateinit var linkToRegistration: TextView
+    private lateinit var userNameField: EditText
+    private lateinit var userPasswordField: EditText
+    private lateinit var authButton: Button
+    private lateinit var linkToRegistration: TextView
     private val requests= Requests(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,19 +36,22 @@ class MainActivity : AppCompatActivity() {
         authButton= findViewById(R.id.button_auth)
         linkToRegistration= findViewById(R.id.link_to_registration)
         authButton.setOnClickListener{
-            val intent = Intent(this, DishChoiceActivity::class.java)
-            startActivity(intent)
-            //userLogin()
+            userLogin()
+            if(SharedPrefManager.getInstance(this).isLoggedIn) {
+
+                val intent = Intent(this, DishChoiceActivity::class.java)
+                startActivity(intent)
+            }
         }
         linkToRegistration.setOnClickListener {
-            val registerIntent = Intent(this, RegisterActivity::class.java)
-            startActivity(registerIntent)
+            finish()
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
-        /*if(SharedPrefManager.getInstance(this).isLoggedIn) {
+        if(SharedPrefManager.getInstance(this).isLoggedIn) {
                 db.deleteDishes()
-                val intent = Intent(this, LoginActivity::class.java)
+                val intent = Intent(this, DishChoiceActivity::class.java)
                 startActivity(intent)
-        } */
+        }
     }
     private fun userLogin() {
         val login = userNameField.text.toString().trim()
@@ -63,28 +66,24 @@ class MainActivity : AppCompatActivity() {
             userPasswordField.requestFocus()
             return
         }
-        val onLoginResponse:(String)-> Unit={ response ->
+        val onLoginResponse:(JSONObject)-> Unit={ response ->
             try {
-                val obj = JSONObject(response)
-                if(!obj.getBoolean("error")) {
-                    Toast.makeText(applicationContext, obj.getString("message"), Toast.LENGTH_SHORT).show()
-                    val userJson = obj.getJSONObject("user")
-                    val user = User(
-                        userJson.getInt("id"),
-                        userJson.getString("username"),
-                        userJson.getInt("calories")
-                    )
-                    SharedPrefManager.getInstance(applicationContext).userLogin(user)
-                    finish()
-                    startActivity(Intent(applicationContext, MainActivity::class.java))
-                } else {
-                    Toast.makeText(applicationContext, obj.getString("message"), Toast.LENGTH_SHORT).show()
-                }
+                val jwt = response.getString("jwt")
+                val user = User(
+                    login,
+                    pass,
+                    null,
+                    jwt
+                )
+                SharedPrefManager.getInstance(applicationContext).userLogin(user)
+                finish()
+                startActivity(Intent(applicationContext, MainActivity::class.java))
+
             } catch(e: JSONException) {
                 e.printStackTrace()
             }
         }
-        val stringRequest = requests.geLoginRequest(login, pass, onLoginResponse)
-        VolleySingleton.getInstance(this).addToRequestQueue(stringRequest)
+        val jsonObjectRequest = requests.geLoginRequest(login, pass, onLoginResponse)
+        VolleySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest)
     }
 }

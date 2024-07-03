@@ -3,16 +3,11 @@ package com.example.s_eda_app.db
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-import android.database.sqlite.SQLiteCursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.text.format.DateUtils
 import android.widget.Toast
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
+import com.example.s_eda_app.Constants
 import com.example.s_eda_app.Tools
-import com.example.s_eda_app.URLs
 import com.example.s_eda_app.entity.Dish
 import com.example.s_eda_app.entity.Ingredient
 import com.example.s_eda_app.volley.Requests
@@ -20,7 +15,10 @@ import com.example.s_eda_app.volley.VolleySingleton
 import org.json.JSONException
 import org.json.JSONObject
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
 import java.util.Date
+import java.util.Locale
+
 
 class DBHelper(private val context: Context, private val factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, DB_NAME, factory, 1){
@@ -29,7 +27,7 @@ class DBHelper(private val context: Context, private val factory: SQLiteDatabase
     private val requests=Requests(context)
     override fun onCreate(db: SQLiteDatabase?) {
         val query =
-            "CREATE TABLE $DISHES_TABLE_NAME ($DISHES_ID_COL  INT PRIMARY KEY, $DISHES_TITLE_COl TEXT, $DISHES_PHOTO_COl TEXT, $DISHES_TIME_COl TEXT, $DISHES_ADDITIONAL_TIME_COl TEXT, $DISHES_RECIPE_COl TEXT, $DISHES_CALORIES_COl REAL, $DISHES_P_COl REAL, $DISHES_F_COl REAL, $DISHES_C_COl REAL, $DISHES_NUMER_COl INT, $DISHES_TIMESTAMP_COl DATETIME DEFAULT CURRENT_TIMESTAMP )"
+            "CREATE TABLE $DISHES_TABLE_NAME ($DISHES_ID_COL  INT PRIMARY KEY, $DISHES_TITLE_COl TEXT, $DISHES_PHOTO_COl TEXT, $DISHES_TIME_COl TEXT, $DISHES_ADDITIONAL_TIME_COl TEXT, $DISHES_RECIPE_COl TEXT, $DISHES_CALORIES_COl REAL, $DISHES_P_COl REAL, $DISHES_F_COl REAL, $DISHES_C_COl REAL, $DISHES_NUMER_COl INT, $DISHES_DAY_COl INT )"
         val query1=
             "CREATE TABLE $INGREDIENTS_TABLE_NAME ($INGREDIENTS_ID_COL INT PRIMARY KEY, $INGREDIENTS_TITLE_COl TEXT, $INGREDIENTS_WEIGHT_COl REAL, $INGREDIENTS_CALORIES_COl REAL, $INGREDIENTS_P_COl REAL, $INGREDIENTS_F_COl REAL, $INGREDIENTS_C_COl REAL, $INGREDIENTS_DISH_ID_COl INT, FOREIGN KEY($INGREDIENTS_DISH_ID_COl) REFERENCES $DISHES_TABLE_NAME($DISHES_ID_COL))"
         db!!.execSQL(query)
@@ -55,8 +53,15 @@ class DBHelper(private val context: Context, private val factory: SQLiteDatabase
         values.put(DISHES_F_COl, dish.f)
         values.put(DISHES_C_COl, dish.c)
         values.put(DISHES_NUMER_COl, numer)
+        val today = getDay()
+        values.put(DISHES_DAY_COl, today)
         val db = this.writableDatabase
-        db.insert(DISHES_TABLE_NAME, null, values)
+        try{
+            db.insert(DISHES_TABLE_NAME, null, values)
+        } catch (e: Exception){
+            val id=dish.id
+            db.rawQuery("UPDATE $DISHES_TABLE_NAME SET $DISHES_DAY_COl='$today' WHERE $DISHES_ID_COL='$id'",null).close()
+        }
         db.close()
     }
     public fun addAllDishes(dishes: List<Dish>){
@@ -97,8 +102,9 @@ class DBHelper(private val context: Context, private val factory: SQLiteDatabase
         }
     }
     public fun deleteDishes(){
-        val db=this.writableDatabase
-        val result = db.rawQuery("SELECT $DISHES_ID_COL FROM $DISHES_TABLE_NAME WHERE $DISHES_TIMESTAMP_COl <= strftime('%s', datetime('now', '-2 day'))", null)
+        val db=this.writableDatabase//FIXME сделать так чтобю это функция очищала все таблицы
+        val today = getDay()
+        val result = db.rawQuery("SELECT $DISHES_ID_COL FROM $DISHES_TABLE_NAME WHERE $DISHES_DAY_COl <'$today'", null)
         val ids = mutableListOf<Int>()
         if(result.moveToFirst()){
             ids+=result.getInt(result.getColumnIndexOrThrow(DISHES_ID_COL))
@@ -107,8 +113,9 @@ class DBHelper(private val context: Context, private val factory: SQLiteDatabase
             ids+=result.getInt(result.getColumnIndexOrThrow(DISHES_ID_COL))
         }
         for (id in ids) {
-            db.rawQuery("DELETE FROM $INGREDIENTS_TABLE_NAME WHERE $INGREDIENTS_DISH_ID_COl='$id'", null)
-            db.rawQuery("DELETE FROM $DISHES_TABLE_NAME WHERE $DISHES_ID_COL='$id'", null)
+            db.rawQuery("DELETE FROM $INGREDIENTS_TABLE_NAME WHERE $INGREDIENTS_DISH_ID_COl='$id'", null).close()
+            db.rawQuery("DELETE FROM $DISHES_TABLE_NAME WHERE $DISHES_ID_COL='$id'", null).close()
+
             tools.deleteImage(id, context)
         }
 
@@ -122,6 +129,7 @@ class DBHelper(private val context: Context, private val factory: SQLiteDatabase
         values.put(INGREDIENTS_P_COl, ingredient.p)
         values.put(INGREDIENTS_F_COl, ingredient.f)
         values.put(INGREDIENTS_C_COl, ingredient.c)
+        values.put(INGREDIENTS_WEIGHT_COl, ingredient.weight)
         values.put(INGREDIENTS_DISH_ID_COl, dishId)
         val db = this.writableDatabase
         db.insert(INGREDIENTS_TABLE_NAME, null, values)
@@ -135,18 +143,9 @@ class DBHelper(private val context: Context, private val factory: SQLiteDatabase
     public fun getDishesForToday(): List<Dish> {
         val db = this.readableDatabase
         val ans = mutableListOf<Dish>()
-        val result = db.rawQuery("SELECT * from $DISHES_TABLE_NAME where $DISHES_ID_COL in (select $DISHES_ID_COL  from $DISHES_TABLE_NAME order by $DISHES_TIMESTAMP_COl desc limit 3) order by $DISHES_NUMER_COl ", null)
-        val r:String
+        val result = db.rawQuery("SELECT * from $DISHES_TABLE_NAME where $DISHES_ID_COL in (select $DISHES_ID_COL  from $DISHES_TABLE_NAME order by $DISHES_DAY_COl desc limit 3) order by $DISHES_NUMER_COl ", null)
         if( result.moveToFirst()){
             ans+= nextDish(result)
-            r=result.getString(result.getColumnIndexOrThrow(DISHES_TIMESTAMP_COl))
-            val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
-            val currentDate = sdf.format(Date())
-            val splt=r.split("-"," ", ":")
-            val splt1=currentDate.split("/"," ", ":")
-            if((splt[2].toInt()<splt1[0].toInt()||splt[1].toInt()<splt1[1].toInt())&& splt[3].toInt()<22){
-                return emptyList()
-            }
         }
         while(result.moveToNext()){
             ans+= nextDish(result)
@@ -167,7 +166,8 @@ class DBHelper(private val context: Context, private val factory: SQLiteDatabase
         result.getFloat(result.getColumnIndexOrThrow(DISHES_P_COl)),
         result.getFloat(result.getColumnIndexOrThrow(DISHES_F_COl)),
         result.getFloat(result.getColumnIndexOrThrow(DISHES_C_COl)),
-        result.getInt(result.getColumnIndexOrThrow(DISHES_NUMER_COl))))
+        result.getInt(result.getColumnIndexOrThrow(DISHES_NUMER_COl)),
+        result.getInt(result.getColumnIndexOrThrow(DISHES_DAY_COl))))
     }
     public fun getIngredientsOfDish(id: Int): List<Ingredient>{
         val db = this.readableDatabase
@@ -183,7 +183,7 @@ class DBHelper(private val context: Context, private val factory: SQLiteDatabase
         db.close()
         return ans
     }
-    fun nextIngredient(result: Cursor):MutableList<Ingredient>{
+    private fun nextIngredient(result: Cursor):MutableList<Ingredient>{
         return mutableListOf( Ingredient(
             result.getInt(result.getColumnIndexOrThrow(INGREDIENTS_ID_COL)),
             result.getString(result.getColumnIndexOrThrow(INGREDIENTS_TITLE_COl)),
@@ -192,6 +192,14 @@ class DBHelper(private val context: Context, private val factory: SQLiteDatabase
             result.getFloat(result.getColumnIndexOrThrow(INGREDIENTS_P_COl)),
             result.getFloat(result.getColumnIndexOrThrow(INGREDIENTS_F_COl)),
             result.getFloat(result.getColumnIndexOrThrow(INGREDIENTS_C_COl))))
+    }
+    private fun getDay():Int{
+        val now= LocalDateTime.now()
+        return if(now.hour>=Constants.MENU_UPDATE_TIME){
+            now.plusDays(1).dayOfMonth
+        }else{
+            now.dayOfMonth
+        }
     }
 
     companion object{
@@ -210,7 +218,7 @@ class DBHelper(private val context: Context, private val factory: SQLiteDatabase
         val DISHES_F_COl = "f"
         val DISHES_C_COl = "c"
         val DISHES_NUMER_COl = "numer"
-        val DISHES_TIMESTAMP_COl = "timestamp"
+        val DISHES_DAY_COl = "day"
 
 
         val INGREDIENTS_TABLE_NAME = "ingredients"
